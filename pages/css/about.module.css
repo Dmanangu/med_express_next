@@ -1,0 +1,29 @@
+.bigLogo-container{
+    margin-left: 36%;
+}
+.aboutUs{
+    text-align: center;
+    font-size: 30px;
+}
+.logoPlace{
+    margin-left:45%;
+ }
+.aboutPageBodyContainer{
+    margin-top: 30px;
+    width: 80%;
+    margin-left: 10%;
+}
+.bodyAbout{
+    text-align: justify;
+    font-size: 30px;
+}
+
+.goHome{
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 20px;
+    margin-left: 30px;
+    margin-top: 30px;
+    color: white;
+    background-color: blue;
+}

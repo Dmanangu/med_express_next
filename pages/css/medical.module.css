@@ -1,0 +1,12 @@
+.ms{
+    border-radius: 30px;
+    margin-top: 10%;
+}
+.searchContainer{
+    text-align: center;
+}
+.search{
+    padding: 10px;
+    width: 40vw;
+    font-size: 20px;
+}
