@@ -8,16 +8,17 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
-import Layout from "../component/Layout";
-import styles from "../styles/Home.module.css";
 import data from "../utils/data";
-import NextLink from "next/link";
 
 export default function ProductCard() {
-  const addToCartHandler = async () => {
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity: 1 } });
-  };
+  // const { medicine } = props;
+  // if (!medicine) {
+  //   return <div>Product Not Found</div>;
+  // }
+  // const addToCartHandler = async () => {
+  //   const { data } = await axios.get(`/api/products/${medicine._id}`);
+  //   dispatch({ type: "CART_ADD_ITEM", payload: { ...medicine, quantity: 1 } });
+  // };
   return (
     <div>
       <Grid container spacing={3}>
@@ -46,12 +47,7 @@ export default function ProductCard() {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={addToCartHandler}
-                >
+                <Button fullWidth variant="contained" color="primary">
                   ADD TO CART
                 </Button>
               </CardActions>

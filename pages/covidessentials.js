@@ -1,5 +1,5 @@
 import Layout from "../component/Layout";
-import NextLink from "next/link";
+// import NextLink from "next/link";
 import Image from "next/image";
 import bgCE from "../public/images/bg_ce.PNG";
 import styles from "./css/covidessentials.module.css";
