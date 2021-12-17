@@ -34,7 +34,7 @@ export default function Layout({ title, children }) {
         fontWeight: 400,
         margin: "1rem 0",
       },
-      pallete: {
+      palette: {
         type: darkMode ? "dark" : "light",
         primary: {
           main: "#2596be",
@@ -72,10 +72,10 @@ export default function Layout({ title, children }) {
             </NextLink>
             <div className={classes.grow}></div>
             <div>
-              <Switch
+              {/* <Switch
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
-              ></Switch>
+              ></Switch> */}
               <NextLink href="/about" passHref>
                 <Link className={classes.sizePlus}>About Us</Link>
               </NextLink>

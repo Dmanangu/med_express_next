@@ -2,7 +2,7 @@ import Layout from "../component/Layout";
 import NextLink from "next/link";
 import Image from "next/image";
 import bgPAH from "../public/images/bg_pah.PNG";
-import styles from "./css/medical.module.css";
+import styles from "./css/protection.module.css";
 
 export default function prescription() {
   return (
