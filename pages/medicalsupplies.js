@@ -1,5 +1,5 @@
 import Layout from "../component/Layout";
-import NextLink from "next/link";
+// import NextLink from "next/link";
 import Image from "next/image";
 import bgMS from "../public/images/bg_ms.PNG";
 import styles from "./css/medical.module.css";

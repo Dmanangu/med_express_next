@@ -8,17 +8,24 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
-import data from "../utils/data";
+import data from "../../utils/data";
+import axios from "axios";
+import { useContext } from "react";
+import { Store } from "../../utils/Store";
+import { useRouter } from "next/router";
 
-export default function ProductCard() {
-  // const { medicine } = props;
-  // if (!medicine) {
-  //   return <div>Product Not Found</div>;
-  // }
-  // const addToCartHandler = async () => {
-  //   const { data } = await axios.get(`/api/products/${medicine._id}`);
-  //   dispatch({ type: "CART_ADD_ITEM", payload: { ...medicine, quantity: 1 } });
-  // };
+export default function ProductCard(props) {
+  const router = useRouter();
+  const { dispatch } = useContext(Store);
+  const { products } = props;
+  if (!products) {
+    return <div>Product Not Found</div>;
+  }
+  const addToCartHandler = async () => {
+    const { products } = await axios.get(`/api/products/${products._id}`);
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...products, quantity: 1 } });
+    router.push("/cart");
+  };
   return (
     <div>
       <Grid container spacing={3}>
@@ -47,7 +54,12 @@ export default function ProductCard() {
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Button fullWidth variant="contained" color="primary">
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={addToCartHandler}
+                >
                   ADD TO CART
                 </Button>
               </CardActions>

@@ -1,9 +1,9 @@
 import Layout from "../component/Layout";
-import NextLink from "next/link";
+// import NextLink from "next/link";
 import Image from "next/image";
 import bgOver from "../public/images/bg_over.PNG";
 import styles from "./css/overthecounter.module.css";
-
+import ProductCard from "./card/card";
 export default function Home() {
   return (
     <Layout>
@@ -18,6 +18,7 @@ export default function Home() {
             placeholder="Search Over the counter medicine here"
           />
         </div>
+        <ProductCard />
       </div>
     </Layout>
   );

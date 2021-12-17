@@ -1,5 +1,5 @@
 import Layout from "../component/Layout";
-import NextLink from "next/link";
+// import NextLink from "next/link";
 import Image from "next/image";
 import bgPC from "../public/images/bg_pc.PNG";
 import styles from "./css/personalcare.module.css";
