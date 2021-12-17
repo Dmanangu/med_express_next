@@ -16,14 +16,20 @@ import { useRouter } from "next/router";
 
 export default function ProductCard(props) {
   const router = useRouter();
-  const { dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const { products } = props;
   if (!products) {
     return <div>Product Not Found</div>;
   }
   const addToCartHandler = async () => {
-    const { products } = await axios.get(`/api/products/${products._id}`);
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...products, quantity: 1 } });
+    const existItem = state.cart.cartItems.find((x) => x._id === products._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${products._id}`);
+    if (data.countInstock < quantity) {
+      window.alert("Sorry. Product is Out of Stock");
+      return;
+    }
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...products, quantity } });
     router.push("/cart");
   };
   return (
@@ -58,7 +64,7 @@ export default function ProductCard(props) {
                   fullWidth
                   variant="contained"
                   color="primary"
-                  onClick={addToCartHandler}
+                  onClick={() => addToCartHandler(products)}
                 >
                   ADD TO CART
                 </Button>
