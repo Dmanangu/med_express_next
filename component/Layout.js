@@ -36,14 +36,14 @@ export default function Layout({ title, children }) {
         fontWeight: 400,
         margin: "1rem 0",
       },
-      palette: {
-        type: darkMode ? "dark" : "light",
-        primary: {
-          main: "#2596be",
-        },
-        secondary: {
-          main: "#208080",
-        },
+    },
+    palette: {
+      type: darkMode ? "dark" : "light",
+      primary: {
+        main: "#f0c000",
+      },
+      secondary: {
+        main: "#208080",
       },
     },
   });

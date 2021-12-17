@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     fontSize: "20px",
   },
   main: {
-    minHeight: "90vh",
+    minHeight: "80vh",
     minWidth: "80vw",
   },
   footer: {
