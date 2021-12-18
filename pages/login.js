@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import useStyles from "../utils/style";
 import NextLink from "next/link";
@@ -20,9 +20,11 @@ export default function Login() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
-  if (userInfo) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (userInfo) {
+      router.push("/");
+    }
+  }, []);
   const [email, setEmail] = useState(""); //no database yet
   const [password, setPassword] = useState(""); //no database yet
   const { redirect } = router.query; //login?redirect=/shipping
