@@ -6,16 +6,53 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import useStyles from "../utils/style";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { Store } from "../utils/Store";
+import Cookies from "js-cookie";
 
 export default function Register() {
   const classes = useStyles();
-
+  const router = useRouter();
+  const { state, dispatch } = useContext(Store);
+  const { userInfo } = state;
+  useEffect(() => {
+    if (userInfo) {
+      router.push("/");
+    }
+  }, []);
+  const [name, setName] = useState(""); //no database yet
+  const [email, setEmail] = useState(""); //no database yet
+  const [phone, setPhone] = useState(""); //no database yet
+  const [password, setPassword] = useState(""); //no database yet
+  const [confirmPassword, setConfirmPassword] = useState(""); //no database yet
+  const { redirect } = router.query; //login?redirect=/shipping
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Password don't match");
+    }
+    try {
+      const { data } = await axios.post("/api/users/register", {
+        name,
+        email,
+        phone,
+        password,
+      });
+      dispatch({ type: "USER_LOGIN", payload: data });
+      Cookies.set("userInfo", data);
+      router.push(redirect || "/");
+      alert("success login");
+    } catch (err) {
+      alert(err.response.data ? err.response.data.message : err.message);
+    }
+  };
   return (
-    <Layout title="Login">
+    <Layout title="Register">
       <form className={classes.form}>
         <Typography component="h1" variant="h1">
           Register
@@ -28,7 +65,8 @@ export default function Register() {
               fullWidth
               id="name"
               label="Name"
-              inputProps={{ type: "name" }}
+              inputProps={{ type: "text" }}
+              onChange={(e) => setName(e.target.value)}
               required
             ></TextField>
           </ListItem>
@@ -41,18 +79,20 @@ export default function Register() {
               id="email"
               label="Email"
               inputProps={{ type: "email" }}
+              onChange={(e) => setEmail(e.target.value)}
               required
             ></TextField>
           </ListItem>
 
           <ListItem>
-            {/* phone number holder */}
+            {/* phone holder */}
             <TextField
               variant="outlined"
               fullWidth
               id="tel"
-              label="Phone number"
+              label="Mobile Number"
               inputProps={{ type: "tel" }}
+              onChange={(e) => setPhone(e.target.value)}
               required
             ></TextField>
           </ListItem>
@@ -65,31 +105,39 @@ export default function Register() {
               id="password"
               label="Password"
               inputProps={{ type: "password" }}
+              onChange={(e) => setPassword(e.target.value)}
               required
             ></TextField>
           </ListItem>
 
           <ListItem>
-            {/* Confirm holder */}
+            {/* password holder */}
             <TextField
               variant="outlined"
               fullWidth
-              id="password"
-              label="Confirm password"
+              id="confirmPassword"
+              label="Confirm Password"
               inputProps={{ type: "password" }}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             ></TextField>
           </ListItem>
 
           <ListItem>
-            <Button variant="contained" type="submit" fullWidth color="primary">
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              color="primary"
+              onClick={submitHandler}
+            >
               Register
             </Button>
           </ListItem>
           <ListItem>
-            Already have an account? &nbsp;
-            <NextLink href="/login" passHref>
-              <Link> Login </Link>
+            Already have an Account? &nbsp;
+            <NextLink href={`/login?redirect=${redirect || "/"}`} passHref>
+              <Link> Login</Link>
             </NextLink>
           </ListItem>
         </List>

@@ -58,6 +58,7 @@ export default function Login() {
               id="email"
               label="Email"
               inputProps={{ type: "email" }}
+              onChange={(e) => setEmail(e.target.value)}
               required
             ></TextField>
           </ListItem>
@@ -70,6 +71,7 @@ export default function Login() {
               id="password"
               label="Password"
               inputProps={{ type: "password" }}
+              onChange={(e) => setPassword(e.target.value)}
               required
             ></TextField>
           </ListItem>
@@ -86,7 +88,7 @@ export default function Login() {
           </ListItem>
           <ListItem>
             Does not have an account? &nbsp;
-            <NextLink href="/register" passHref>
+            <NextLink href={`/register?redirect=${redirect || "/"}`} passHref>
               <Link> Register</Link>
             </NextLink>
           </ListItem>
