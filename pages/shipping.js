@@ -1,6 +1,5 @@
 import {
   Button,
-  Link,
   List,
   ListItem,
   TextField,
@@ -9,11 +8,11 @@ import {
 import React, { useContext, useEffect } from "react";
 import Layout from "../component/Layout";
 import useStyles from "../utils/style";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
+import CheckoutWizzard from "../component/checkoutWizzard";
 
 export default function Shipping() {
   const {
@@ -40,16 +39,15 @@ export default function Shipping() {
     setValue("city", shippingAddress.city);
   }, []);
 
-  const { redirect } = router.query; //login?redirect=/shipping
-  const submitHandler = ({ fullName, address, baranggay, phone, city }) => {
+  const submitHandler = ({ fullName, address, barangay, phone, city }) => {
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
-      payload: { fullName, address, baranggay, phone, city },
+      payload: { fullName, address, barangay, phone, city },
     }); //needs db
     Cookies.set("shippingAddress", {
       fullName,
       address,
-      baranggay,
+      barangay,
       phone,
       city,
     });
@@ -57,6 +55,7 @@ export default function Shipping() {
   };
   return (
     <Layout title="Shipping Address">
+      <CheckoutWizzard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography component="h1" variant="h1">
           Shipping Address
