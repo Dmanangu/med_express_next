@@ -13,6 +13,7 @@ import NextLink from "next/link";
 
 export default function Register() {
   const classes = useStyles();
+
   return (
     <Layout title="Login">
       <form className={classes.form}>
