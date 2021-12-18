@@ -87,11 +87,11 @@ export default function Register() {
                   fullWidth
                   id="name"
                   label="Name"
-                  inputProps={{ type: "password" }}
-                  error={Boolean(errors.password)}
+                  inputProps={{ type: "name" }}
+                  error={Boolean(errors.name)}
                   helperText={
-                    errors.password
-                      ? errors.password.type === "minLength"
+                    errors.name
+                      ? errors.name.type === "minLength"
                         ? "Name length is more than 1"
                         : "Name is required"
                       : ""
