@@ -93,7 +93,7 @@ function CartScreen() {
                           </Link>
                         </NextLink>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         <Select
                           value={item.quantity}
                           onChange={(e) =>
@@ -107,7 +107,7 @@ function CartScreen() {
                           ))}
                         </Select>
                       </TableCell>
-                      <TableCell>₱{item.price}</TableCell>
+                      <TableCell align="right">₱{item.price}</TableCell>
                       <TableCell>
                         <Button
                           variant="contained"
