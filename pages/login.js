@@ -21,6 +21,7 @@ export default function Login() {
         </Typography>
         <List>
           <ListItem>
+            {/* email holder */}
             <TextField
               variant="outlined"
               fullWidth
@@ -32,6 +33,7 @@ export default function Login() {
           </ListItem>
 
           <ListItem>
+            {/* password holder */}
             <TextField
               variant="outlined"
               fullWidth

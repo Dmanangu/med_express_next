@@ -41,10 +41,10 @@ const useStyles = makeStyles({
   },
   addButton: {
     primary: {
-      main: "#2596be",
+      main: "#2596be", //changed color to lighter blue
     },
     secondary: {
-      main: "#208080",
+      main: "#2596be",
     },
   },
   form: {

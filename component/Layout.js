@@ -53,8 +53,7 @@ export default function Layout({ title, children }) {
     const newDarkMode = !darkMode;
     Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
   };
-  // will remove dark mode because it is not needed
-
+  
   return (
     <div>
       <Head>
@@ -80,7 +79,7 @@ export default function Layout({ title, children }) {
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
               ></Switch>
-              {/* will remove this switch because it is not needed */}
+              
 
               <NextLink href="/about" passHref>
                 <Link className={classes.sizePlus}>About Us</Link>
