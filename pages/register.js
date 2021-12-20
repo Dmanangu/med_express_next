@@ -16,6 +16,7 @@ import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import getError from "../utils/error";
 
 export default function Register() {
   const {
@@ -59,10 +60,7 @@ export default function Register() {
       router.push(redirect || "/");
       alert("success login");
     } catch (err) {
-      enqueueSnackbar(
-        err.response.data ? err.response.data.message : err.message,
-        { variant: "error" }
-      );
+      enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
   return (
@@ -131,18 +129,6 @@ export default function Register() {
               )}
             ></Controller>
           </ListItem>
-
-          {/* <ListItem>
-            <TextField
-              variant="outlined"
-              fullWidth
-              id="tel"
-              label="Mobile Number"
-              inputProps={{ type: "tel" }}
-              required
-            ></TextField>
-          </ListItem> */}
-
           <ListItem>
             <Controller
               name="password"
