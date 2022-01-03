@@ -38,7 +38,7 @@ function Profile() {
     if (!userInfo) {
       return router.push("/login");
     }
-    setValue("name", userInfo.name);
+    setValue("name", userInfo.name); 
     setValue("email", userInfo.email);
   }, []);
   const submitHandler = async ({ name, email, password, confirmPassword }) => {
