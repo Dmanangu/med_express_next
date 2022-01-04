@@ -8,7 +8,6 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
-import data from "../../utils/data";
 import axios from "axios";
 import { useContext } from "react";
 import { Store } from "../../utils/Store";
@@ -32,22 +31,23 @@ export default function ProductCard(props) {
     dispatch({ type: "CART_ADD_ITEM", payload: { ...products, quantity } });
     router.push("/cart");
   };
+
   return (
     <div>
       <Grid container spacing={3}>
         {data.products.map((products) => (
-          <Grid item md={3} key={products.name}>
+          <Grid item md={3} key={products.prodName}>
             <Card>
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={products.image}
+                  image={products.imageUrl}
                   height={100}
                   width={200}
-                  title={products.name}
+                  title={products.prodName}
                 ></CardMedia>
                 <CardContent>
-                  <Typography>{products.name}</Typography>
+                  <Typography>{products.prodName}</Typography>
                 </CardContent>
                 <CardContent>
                   <Typography>{products.genName}</Typography>

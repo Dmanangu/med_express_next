@@ -1,4 +1,7 @@
-import { getApps, initializeApp } from "firebase/app";
+import firebase from "firebase/compat/app";
+
+import "firebase/firestore";
+import "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -9,6 +12,9 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-if (!getApps.length) {
-  initializeApp(firebaseConfig);
+export default function initFirebase() {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    console.log("Connected to Firebase");
+  }
 }

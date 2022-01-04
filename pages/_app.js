@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import "../styles/globals.css";
 import { StoreProvider } from "../utils/Store";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { AuthProvider } from "../utils/hook/auth";
-import { AuthStateChanged } from "../utils/layout/AuthStateChanged";
 
 // added Auth Provider and AuthStateChanged
 
@@ -19,11 +17,11 @@ function MyApp({ Component, pageProps }) {
     <SnackbarProvider anchorOrigin={{ vertical: "top", horizontal: "center" }}>
       <StoreProvider>
         <PayPalScriptProvider deferLoading={true}>
-          <AuthProvider>
-            <AuthStateChanged>
-              <Component {...pageProps} />
-            </AuthStateChanged>
-          </AuthProvider>
+          {/* <AuthProvider>
+            <AuthStateChanged> */}
+          <Component {...pageProps} />
+          {/* </AuthStateChanged>
+          </AuthProvider> */}
         </PayPalScriptProvider>
       </StoreProvider>
     </SnackbarProvider>
