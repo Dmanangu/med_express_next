@@ -75,6 +75,7 @@ export default function Layout({ title, children }) {
     Cookies.remove("cartItems");
     router.push("/");
   };
+
   return (
     <div>
       <Head>
