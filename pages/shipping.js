@@ -13,8 +13,13 @@ import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import CheckoutWizzard from "../component/CheckoutWizzard";
+import { UserContext } from "../lib/context";
+import { auth, firestore } from "../lib/firebase";
+
+//
 
 export default function Shipping() {
+  const { user } = useContext(UserContext);
   const {
     handleSubmit,
     control,
@@ -23,34 +28,59 @@ export default function Shipping() {
   } = useForm();
   const classes = useStyles();
   const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-  const {
-    userInfo,
-    cart: { shippingAddress },
-  } = state;
+  // const { state, dispatch } = useContext(Store);
+  // const {
+  //   cart: { shippingAddress },
+  // } = state;
   useEffect(() => {
-    if (!userInfo) {
+    if (!user) {
       router.push("/login?redirect=/shipping");
     }
-    setValue("fullName", shippingAddress.fullName);
-    setValue("address", shippingAddress.address);
-    setValue("baranggay", shippingAddress.barangay);
-    setValue("phone", shippingAddress.phone);
-    setValue("city", shippingAddress.city);
+    // setValue("fullName", shippingAddress.fullName);
+    // setValue("address", shippingAddress.address);
+    // setValue("barangay", shippingAddress.barangay);
+    // setValue("phone", shippingAddress.phone);
+    // setValue("city", shippingAddress.city);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const submitHandler = ({ fullName, address, barangay, phone, city }) => {
-    dispatch({
-      type: "SAVE_SHIPPING_ADDRESS",
-      payload: { fullName, address, barangay, phone, city },
-    }); //needs db
-    Cookies.set("shippingAddress", {
-      fullName,
-      address,
-      barangay,
-      phone,
-      city,
+  const submitHandler = async ({
+    fullName,
+    address,
+    barangay,
+    phone,
+    city,
+  }) => {
+    // dispatch({
+    //   type: "SAVE_SHIPPING_ADDRESS",
+    //   payload: { fullName, address, barangay, phone, city },
+    // }); //needs db
+    // Cookies.get("shippingAddress", {
+    //   fullName,
+    //   address,
+    //   barangay,
+    //   phone,
+    //   city,
+    // });
+
+    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+    //const usernameDoc = firestore.doc(usernames/${formValue});
+
+    // Commit both docs together as a batch write.
+    const batch = firestore.batch();
+    batch.set(userDoc, {
+      id: auth.currentUser.uid,
+      fullName: fullName,
+      address: "address",
+      barangay: "barangay",
+      phone: "phone",
+      city: "city",
     });
+    //batch.set(usernameDoc, { uid: user.uid });
+    if (!userDoc) {
+      throw new Error("There was an error in uploading Shipping Address");
+    }
+    await batch.commit();
     router.push("/payment");
   };
   return (
@@ -220,5 +250,34 @@ export default function Shipping() {
         </List>
       </form>
     </Layout>
+  );
+}
+
+function Continue({ fullName, address, barangay, phone, city }) {
+  const signInWithGoogle = async () => {
+    // Create refs for both documents
+    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+    //const usernameDoc = firestore.doc(usernames/${formValue});
+
+    // Commit both docs together as a batch write.
+    const batch = firestore.batch();
+    batch.set(userDoc, {
+      id: auth.currentUser.uid,
+      fullName: fullName,
+      address: address,
+      barangay: barangay,
+      phone: phone,
+      city: city,
+    });
+    //batch.set(usernameDoc, { uid: user.uid });
+    if (!userDoc) {
+      throw new Error("There was an error in uploading Shipping Address");
+    }
+    await batch.commit();
+  };
+  return (
+    <Button onClick={signInWithGoogle} variant="contained">
+      Sign in with Google
+    </Button>
   );
 }

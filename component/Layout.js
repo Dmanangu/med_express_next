@@ -28,7 +28,7 @@ import { UserContext, MedContext } from "../lib/context";
 export default function Layout({ title, children }) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
-  const { darkMode, cart, userInfo } = state;
+  const { darkMode, cart } = state;
   const { user, email } = useContext(UserContext);
 
   const { meds } = useContext(MedContext);

@@ -8,13 +8,13 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
-import axios from "axios";
+// import axios from "axios";
 import { useContext } from "react";
 import { Store } from "../../utils/Store";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 export default function ProductCard({ medicine }) {
-  const router = useRouter();
+  //   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const products = medicine;
   if (!products) {
@@ -28,8 +28,8 @@ export default function ProductCard({ medicine }) {
     // 	window.alert('Sorry. Product is Out of Stock');
     // 	return;
     // }
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...products, quantity } });
-    router.push("/cart");
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...meds, quantity } });
+    // router.push("/cart");
   };
 
   console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");

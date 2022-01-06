@@ -17,12 +17,11 @@ import {
   Button,
   List,
   ListItem,
-  CardMedia,
   Card,
+  CardMedia,
 } from "@material-ui/core";
 import NextLink from "next/link";
-import Image from "next/image";
-import axios from "axios";
+// import axios from "axios";
 import { useRouter } from "next/router";
 
 function CartScreen() {
@@ -32,11 +31,11 @@ function CartScreen() {
     cart: { cartItems },
   } = state;
   const updateCartHandler = async (item, quantity) => {
-    const { data } = await axios.get(`/api/products/${item._id}`);
-    if (data.countInStock <= 0) {
-      window.alert("Sorry. Product is out of Stock");
-      return;
-    }
+    // const { data } = await axios.get(`/api/products/${item.id}`);
+    // if (data.countInStock <= 0) {
+    //   window.alert("Sorry. Product is out of Stock");
+    //   return;
+    // }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
   };
   const removeItemHandler = (item) => {
@@ -80,17 +79,11 @@ function CartScreen() {
                       <TableCell>
                         <CardMedia
                           component="img"
-                          image={item.imageUrl}
+                          src={item.imageUrl}
                           height={50}
                           width={50}
                           title={item.prodName}
                         />
-                        {/* <Image
-                            src={item.imageUrl}
-                            alt={item.prodName}
-                            width={50}
-                            height={50}
-                          ></Image> */}
                       </TableCell>
 
                       <TableCell>

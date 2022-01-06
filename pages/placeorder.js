@@ -17,9 +17,9 @@ import {
   ListItem,
   Card,
   CircularProgress,
+  CardMedia,
 } from "@material-ui/core";
 import NextLink from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import useStyles from "../utils/style";
 import CheckoutWizzard from "../component/CheckoutWizzard";
@@ -50,14 +50,16 @@ function PlaceOrder() {
     if (cartItems.length === 0) {
       router.push("/cart");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { closeSnackBar, enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const placeOrderHandler = async () => {
-    closeSnackBar();
+    // closeSnackBar();
     try {
       setLoading(true);
       //data is from data base
+      // must be posted to firebase
       const { data } = await axios.post(
         "/api/order",
         {
@@ -101,9 +103,9 @@ function PlaceOrder() {
               </ListItem>
               <ListItem>
                 {/* This should be added in the database */}
-                {shippingAddress.fullName},{shippingAddress.address},
+                {/* {shippingAddress.fullName},{shippingAddress.address},
                 {shippingAddress.barangay},{shippingAddress.phone},
-                {shippingAddress.city}
+                {shippingAddress.city} */}
               </ListItem>
             </List>
           </Card>
@@ -139,24 +141,17 @@ function PlaceOrder() {
                       {cartItems.map((item) => (
                         <TableRow key={item.id}>
                           <TableCell>
-                            <NextLink href={`/product/${item.slug}`} passHref>
-                              <Link>
-                                <Image
-                                  src={item.image}
-                                  alt={item.name}
-                                  width={50}
-                                  height={50}
-                                ></Image>
-                              </Link>
-                            </NextLink>
+                            <CardMedia
+                              component="img"
+                              image={item.imageUrl}
+                              height={50}
+                              width={50}
+                              title={item.prodName}
+                            />
                           </TableCell>
 
                           <TableCell>
-                            <NextLink href={`/product/${item.slug}`} passHref>
-                              <Link>
-                                <Typography>{item.name}</Typography>
-                              </Link>
-                            </NextLink>
+                            <Typography>{item.prodName}</Typography>
                           </TableCell>
                           <TableCell align="right">
                             <Typography>{item.quantity}</Typography>
