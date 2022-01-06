@@ -23,25 +23,19 @@ import styles from "./Layout.module.css";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { UserContext, MedContext } from '../lib/context';
+import { UserContext, MedContext } from "../lib/context";
 
 export default function Layout({ title, children }) {
-
-
-
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
   const { user, email } = useContext(UserContext);
 
-  
-
   const { meds } = useContext(MedContext);
 
   console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
-  console.log(meds)
+  console.log(meds);
   console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
-
 
   //will use cart function
   const theme = createTheme({
@@ -126,7 +120,7 @@ export default function Layout({ title, children }) {
               <NextLink href="/cart" passHref>
                 <Link className={classes.sizePlus}>
                   {cart.cartItems.length > 0 ? (
-                    <Badge badgeContent={cart.items.length}>Cart</Badge>
+                    <Badge badgeContent={cart.cartItems.length}>Cart</Badge>
                   ) : (
                     "Cart"
                   )}

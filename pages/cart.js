@@ -17,6 +17,7 @@ import {
   Button,
   List,
   ListItem,
+  CardMedia,
   Card,
 } from "@material-ui/core";
 import NextLink from "next/link";
@@ -44,6 +45,9 @@ function CartScreen() {
   const checkoutHandler = () => {
     router.push("/shipping");
   };
+  console.log("CartItems is here");
+  console.log(cartItems);
+  console.log("CartItems is here");
   return (
     <Layout title="Shopping Cart">
       <Typography component="h1" variant="h1">
@@ -74,24 +78,25 @@ function CartScreen() {
                   {cartItems.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
-                        <NextLink href={`/product/${item.slug}`} passHref>
-                          <Link>
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              width={50}
-                              height={50}
-                            ></Image>
-                          </Link>
-                        </NextLink>
+                        <CardMedia
+                          component="img"
+                          image={item.imageUrl}
+                          height={50}
+                          width={50}
+                          title={item.prodName}
+                        />
+                        {/* <Image
+                            src={item.imageUrl}
+                            alt={item.prodName}
+                            width={50}
+                            height={50}
+                          ></Image> */}
                       </TableCell>
 
                       <TableCell>
-                        <NextLink href={`/product/${item.slug}`} passHref>
-                          <Link>
-                            <Typography>{item.name}</Typography>
-                          </Link>
-                        </NextLink>
+                        <Link>
+                          <Typography>{item.prodName}</Typography>
+                        </Link>
                       </TableCell>
                       <TableCell align="right">
                         <Select
