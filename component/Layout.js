@@ -23,11 +23,26 @@ import styles from "./Layout.module.css";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { UserContext, MedContext } from '../lib/context';
 
 export default function Layout({ title, children }) {
+
+
+
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
+  const { user, email } = useContext(UserContext);
+
+  
+
+  const { meds } = useContext(MedContext);
+
+  console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
+  console.log(meds)
+  console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
+
+
   //will use cart function
   const theme = createTheme({
     typography: {
@@ -117,7 +132,7 @@ export default function Layout({ title, children }) {
                   )}
                 </Link>
               </NextLink>
-              {userInfo ? (
+              {user != null ? (
                 <>
                   <Button
                     aria-controls="simple-menu"
@@ -125,7 +140,7 @@ export default function Layout({ title, children }) {
                     onClick={loginClickHandler}
                     className={classes.navbarButton}
                   >
-                    {userInfo.name}
+                    {email}
                     {/*if a user is logged in the login button will change into their name*/}
                   </Button>
                   <Menu
