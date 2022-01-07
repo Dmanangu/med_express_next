@@ -1,13 +1,12 @@
-import { Step, StepLabel } from "@material-ui/core";
-import { Stepper } from "@mui/material";
+import { Step, StepLabel, Stepper } from "@material-ui/core";
 import React from "react";
 import useStyles from "../utils/style";
 
-export default function CheckoutWizzard({ activeStep = 0 }) {
+export default function CheckoutWizard({ activeStep = 0 }) {
   const classes = useStyles();
   return (
     <Stepper
-      className={classes.transparentBackground}
+      className={classes.transparentBackgroud}
       activeStep={activeStep}
       alternativeLabel
     >

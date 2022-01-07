@@ -18,7 +18,7 @@ import { Store } from "../utils/Store";
 import useStyles from "../utils/style";
 
 export default function Payment() {
-  const { enqueueSnackbar, closeSnackBar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");

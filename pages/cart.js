@@ -18,11 +18,11 @@ import {
   List,
   ListItem,
   Card,
-  CardMedia,
 } from "@material-ui/core";
 import NextLink from "next/link";
 // import axios from "axios";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 function CartScreen() {
   const router = useRouter();
@@ -31,8 +31,8 @@ function CartScreen() {
     cart: { cartItems },
   } = state;
   const updateCartHandler = async (item, quantity) => {
-    // const { data } = await axios.get(`/api/products/${item.id}`);
-    // if (data.countInStock <= 0) {
+    // const { meds } = await axios.get(`/api/products/${item.id}`);
+    // if (meds.countInStock <= 0) {
     //   window.alert("Sorry. Product is out of Stock");
     //   return;
     // }
@@ -77,12 +77,13 @@ function CartScreen() {
                   {cartItems.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
-                        <CardMedia
+                        <Image
                           component="img"
                           src={item.imageUrl}
-                          height={50}
-                          width={50}
+                          height={40}
+                          width={40}
                           title={item.prodName}
+                          alt="no image"
                         />
                       </TableCell>
 
@@ -91,13 +92,14 @@ function CartScreen() {
                           <Typography>{item.prodName}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell>
                         <Select
                           value={item.quantity}
                           onChange={(e) =>
                             updateCartHandler(item, e.target.value)
                           }
                         >
+                          {/* need to change so that it can add more than 1 quantity */}
                           {[...Array(item.countInStock).keys()].map((x) => (
                             <MenuItem key={x + 1} value={x + 1}>
                               {x + 1}
@@ -106,7 +108,7 @@ function CartScreen() {
                         </Select>
                       </TableCell>
                       <TableCell align="right">₱{item.price}</TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         <Button
                           variant="contained"
                           color="secondary"
