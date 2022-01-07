@@ -24,12 +24,13 @@ export default function ProductScreen() {
       </div>
       <Grid container spacing={1}>
         <Grid item md={6} xs={12}>
-          <image
+          <Image
             src={product.image}
             width={640}
             height={640}
             layout="responsive"
-          ></image>
+            alt="NO Image"
+          ></Image>
         </Grid>
       </Grid>
     </Layout>
