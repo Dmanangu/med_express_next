@@ -15,8 +15,8 @@ import {
 } from "@material-ui/core";
 import { getError } from "../utils/error";
 import { Store } from "../utils/Store";
-import Layout from "../components/Layout";
-import useStyles from "../utils/styles";
+import Layout from "../component/Layout";
+import useStyles from "../utils/style";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import Cookies from "js-cookie";
@@ -35,11 +35,12 @@ function Profile() {
   const { userInfo } = state;
 
   useEffect(() => {
-    if (!userInfo) {
-      return router.push("/login");
-    }
-    setValue("name", userInfo.name); 
-    setValue("email", userInfo.email);
+    // if (!userInfo) {
+    //   return router.push("/login");
+    // }
+    // setValue("name", userInfo.name);
+    // setValue("email", userInfo.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const submitHandler = async ({ name, email, password, confirmPassword }) => {
     closeSnackbar();

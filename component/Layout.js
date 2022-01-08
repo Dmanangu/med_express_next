@@ -134,7 +134,7 @@ export default function Layout({ title, children }) {
                     onClick={loginClickHandler}
                     className={classes.navbarButton}
                   >
-                    {email}
+                    {user.displayName}
                     {/*if a user is logged in the login button will change into their name*/}
                   </Button>
                   <Menu

@@ -6,7 +6,7 @@ import styles from "./css/overthecounter.module.css";
 import ProductCard from "./card/card";
 
 import { firestore, postToJSON } from "../lib/firebase";
-import { useState } from "react";
+import React, { useState, setState } from "react";
 // import { firestore, postToJSON } from '../lib/firebase';
 
 // import ReadToCloudFireStore from "../component/cloudFirestore/Read";
@@ -46,6 +46,32 @@ export default function Home(props) {
   console.log(posts);
   console.log("XXXXXXXXXXXXXXXXXXXXXXX");
 
+  // handleChange = (e, ownProps) => {
+  //   this.state(
+  //     {
+  //       ...this.state,
+  //       search: e.target.value,
+  //     },
+  //     () => {
+  //       if (this.state.search && this.state.search.length >= 1) {
+  //         this.getResults(ownProps);
+  //       }
+  //     }
+  //   );
+  // };
+
+  // getResults = (ownProps) => {
+  //   const filteredMedicine = ownProps.filter((meds) => {
+  //     return meds.prodName
+  //       .toLowerCase()
+  //       .includes(this.state.search.toLocaleLowerCase());
+  //   });
+  //   this.setState({
+  //     ...this.state,
+  //     medicineList: filteredMedicine,
+  //   });
+  // };
+
   return (
     <Layout>
       <div>
@@ -57,6 +83,7 @@ export default function Home(props) {
             className={styles.search}
             type="search"
             placeholder="Search Over the counter medicine here"
+            // onChange={(e) => this.handleChange(e, medsByCategory)}
           />
         </div>
         <ProductCard medicine={medsByCategory} />
