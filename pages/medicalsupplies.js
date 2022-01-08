@@ -3,8 +3,26 @@ import Layout from "../component/Layout";
 import Image from "next/image";
 import bgMS from "../public/images/bg_ms.PNG";
 import styles from "./css/medical.module.css";
+import ProductCard from "./card/card";
 
-export default function prescription() {
+import { firestore, postToJSON } from "../lib/firebase";
+import { useState } from "react";
+
+export async function getServerSideProps(context) {
+  const postsQuery = firestore.collectionGroup("medicine");
+
+  const posts = (await postsQuery.get()).docs.map(postToJSON);
+  return {
+    props: { posts },
+  };
+}
+
+export default function prescription(props) {
+  const [posts, setPosts] = useState(props.posts);
+
+  const medsByCategory = posts.filter((meds) => {
+    return meds.category.toLowerCase().includes("f");
+  });
   return (
     <Layout>
       <div>
@@ -18,6 +36,7 @@ export default function prescription() {
             placeholder="Search Medical Supplies Here"
           />
         </div>
+        <ProductCard medicine={medsByCategory} />
       </div>
     </Layout>
   );

@@ -3,8 +3,25 @@ import Layout from "../component/Layout";
 import Image from "next/image";
 import bgPAH from "../public/images/bg_pah.PNG";
 import styles from "./css/protection.module.css";
+import ProductCard from "./card/card";
 
-export default function prescription() {
+import { firestore, postToJSON } from "../lib/firebase";
+import { useState } from "react";
+
+export async function getServerSideProps(context) {
+  const postsQuery = firestore.collectionGroup("medicine");
+
+  const posts = (await postsQuery.get()).docs.map(postToJSON);
+  return {
+    props: { posts },
+  };
+}
+export default function prescription(props) {
+  const [posts, setPosts] = useState(props.posts);
+
+  const medsByCategory = posts.filter((meds) => {
+    return meds.category.toLowerCase().includes("e");
+  });
   return (
     <Layout>
       <div>
@@ -18,6 +35,7 @@ export default function prescription() {
             placeholder="Search Protection and Hygiene Here"
           />
         </div>
+        <ProductCard medicine={medsByCategory} />
       </div>
     </Layout>
   );
