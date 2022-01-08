@@ -24,6 +24,7 @@ const useStyles = makeStyles({
   },
   sizePlus: {
     fontSize: "20px",
+    margin: 30,
   },
   main: {
     minHeight: "80vh",

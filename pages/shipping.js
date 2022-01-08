@@ -119,6 +119,34 @@ export default function Shipping() {
               )}
             ></Controller>
           </ListItem>
+          <ListItem>
+            <Controller
+              name="phone"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 11,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="tel"
+                  label="Mobile Number"
+                  error={Boolean(errors.phone)}
+                  helperText={
+                    errors.phone
+                      ? errors.phone.type === "minLength"
+                        ? "Phone number length should 11 or 12 Digits"
+                        : "Phone number is required"
+                      : ""
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
 
           <ListItem>
             <Controller
@@ -134,7 +162,7 @@ export default function Shipping() {
                   variant="outlined"
                   fullWidth
                   id="address"
-                  label="Address"
+                  label="Street"
                   error={Boolean(errors.address)}
                   helperText={
                     errors.address
@@ -170,35 +198,6 @@ export default function Shipping() {
                       ? errors.barangay.type === "minLength"
                         ? "Barangay length is more than 1"
                         : "Barangay is required"
-                      : ""
-                  }
-                  {...field}
-                ></TextField>
-              )}
-            ></Controller>
-          </ListItem>
-
-          <ListItem>
-            <Controller
-              name="phone"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                minLength: 11,
-              }}
-              render={({ field }) => (
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  id="tel"
-                  label="Mobile Number"
-                  error={Boolean(errors.phone)}
-                  helperText={
-                    errors.phone
-                      ? errors.phone.type === "minLength"
-                        ? "Phone number length should 11 or 12 Digits"
-                        : "Phone number is required"
                       : ""
                   }
                   {...field}
