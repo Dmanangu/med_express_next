@@ -23,7 +23,7 @@ import styles from "./Layout.module.css";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { UserContext, MedContext } from "../lib/context";
+import { UserContext } from "../lib/context";
 import { logout } from "../component/firebase/useUser";
 
 export default function Layout({ title, children }) {
