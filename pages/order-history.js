@@ -20,9 +20,10 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { getError } from "../utils/error";
-import { Store } from "../utils/Store";
+// import { Store } from "../utils/Store";
 import Layout from "../component/Layout";
 import useStyles from "../utils/style";
+import { UserContext } from "../lib/context";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -38,10 +39,11 @@ function reducer(state, action) {
 }
 
 function OrderHistory() {
-  const { state } = useContext(Store);
+  // const { state } = useContext(Store);
   const router = useRouter();
   const classes = useStyles();
-  const { userInfo } = state;
+  // const { userInfo } = state;
+  const { user } = useContext(UserContext);
 
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -50,14 +52,14 @@ function OrderHistory() {
   });
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!user) {
       router.push("/login");
     }
     const fetchOrders = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/history`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
+          headers: { authorization: `Bearer ${user.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
@@ -65,6 +67,7 @@ function OrderHistory() {
       }
     };
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Layout title="Order History">

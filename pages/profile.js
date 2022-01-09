@@ -20,9 +20,9 @@ import useStyles from "../utils/style";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import Cookies from "js-cookie";
-
+import { UserContext } from "../lib/context";
 function Profile() {
-  const { state, dispatch } = useContext(Store);
+  const { dispatch } = useContext(Store);
   const {
     handleSubmit,
     control,
@@ -32,14 +32,14 @@ function Profile() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
   const classes = useStyles();
-  const { userInfo } = state;
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    // if (!userInfo) {
-    //   return router.push("/login");
-    // }
-    // setValue("name", userInfo.name);
-    // setValue("email", userInfo.email);
+    if (!user) {
+      return router.push("/login");
+    }
+    setValue("name", user.displayName);
+    setValue("email", user.email);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const submitHandler = async ({ name, email, password, confirmPassword }) => {
@@ -49,17 +49,17 @@ function Profile() {
       return;
     }
     try {
-      const { data } = await axios.put(
+      const { user } = await axios.put(
         "/api/users/profile",
         {
           name,
           email,
           password,
         },
-        { headers: { authorization: `Bearer ${userInfo.token}` } }
+        { headers: { authorization: `Bearer ${user.token}` } }
       );
-      dispatch({ type: "USER_LOGIN", payload: data });
-      Cookies.set("userInfo", data);
+      dispatch({ type: "USER_LOGIN", payload: user });
+      Cookies.set(user);
 
       enqueueSnackbar("Profile updated successfully", { variant: "success" });
     } catch (err) {

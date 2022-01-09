@@ -42,9 +42,9 @@ export default function Home(props) {
     return meds.category.toLowerCase().includes("a");
   });
 
-  console.log("XXXXXXXXXXXXXXXXXXXXXXX");
-  console.log(posts);
-  console.log("XXXXXXXXXXXXXXXXXXXXXXX");
+  // console.log("XXXXXXXXXXXXXXXXXXXXXXX");
+  // console.log(posts);
+  // console.log("XXXXXXXXXXXXXXXXXXXXXXX");
 
   // handleChange = (e, ownProps) => {
   //   this.state(
