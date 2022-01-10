@@ -18,8 +18,8 @@ import {
 import { Bar } from "react-chartjs-2";
 import { getError } from "../../utils/error";
 import { Store } from "../../utils/Store";
-import Layout from "../../components/Layout";
-import useStyles from "../../utils/styles";
+import Layout from "../../component/Layout";
+import useStyles from "../../utils/style";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -47,9 +47,9 @@ function AdminDashboard() {
   });
 
   useEffect(() => {
-    if (!userInfo) {
-      router.push("/login");
-    }
+    // if (!userInfo) {
+    //   router.push("/login");
+    // }
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
@@ -179,7 +179,7 @@ function AdminDashboard() {
                 </Typography>
               </ListItem>
               <ListItem>
-                <Bar
+                {/* <Bar
                   data={{
                     labels: summary.salesData.map((x) => x._id),
                     datasets: [
@@ -193,7 +193,7 @@ function AdminDashboard() {
                   options={{
                     legend: { display: true, position: "right" },
                   }}
-                ></Bar>
+                ></Bar> */}
               </ListItem>
             </List>
           </Card>

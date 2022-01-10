@@ -21,8 +21,8 @@ import {
 } from "@material-ui/core";
 import { getError } from "../../utils/error";
 import { Store } from "../../utils/Store";
-import Layout from "../../components/Layout";
-import useStyles from "../../utils/styles";
+import Layout from "../../component/Layout";
+import useStyles from "../../utils/style";
 import { useSnackbar } from "notistack";
 
 function reducer(state, action) {
@@ -61,9 +61,9 @@ function AdminUsers() {
     });
 
   useEffect(() => {
-    if (!userInfo) {
-      router.push("/login");
-    }
+    // if (!userInfo) {
+    //   router.push("/login");
+    // }
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
