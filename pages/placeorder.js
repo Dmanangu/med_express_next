@@ -27,14 +27,17 @@ import { useSnackbar } from "notistack";
 import { getError } from "../utils/error";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { UserContext } from "../lib/context";
+import { shipContext } from "../lib/context";
 
 function PlaceOrder() {
   const classes = useStyles();
   const router = useRouter();
+  const { user } = useContext(UserContext);
   const { state, dispatch } = useContext(Store);
   const {
     userInfo,
-    cart: { cartItems, shippingAddress, paymentMethod },
+    cart: { cartItems, paymentMethod },
   } = state;
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; //123.456 -> 123.46
   const itemsPrice = round2(
@@ -72,7 +75,7 @@ function PlaceOrder() {
         },
         {
           headers: {
-            authorization: `Bearer ${userInfo.token}`,
+            authorization: `Bearer ${user.token}`,
           },
         }
       );
@@ -80,12 +83,13 @@ function PlaceOrder() {
       Cookies.remove("cartItems");
       setLoading(false);
       //implement database here in the ._id
-      router.push(`/order/${data._id}`);
+      router.push(`/order/${user.id}`);
     } catch (err) {
       setLoading(false);
       enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
+  const { ship } = useContext(shipContext);
   return (
     <Layout title="Place Order">
       <CheckoutWizzard activeStep={3}></CheckoutWizzard>
@@ -153,7 +157,7 @@ function PlaceOrder() {
                           <TableCell>
                             <Typography>{item.prodName}</Typography>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell>
                             <Typography>{item.quantity}</Typography>
                           </TableCell>
                           <TableCell align="right">

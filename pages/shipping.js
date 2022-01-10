@@ -15,7 +15,6 @@ import { Controller, useForm } from "react-hook-form";
 import CheckoutWizzard from "../component/CheckoutWizzard";
 import { UserContext } from "../lib/context";
 import { auth, firestore } from "../lib/firebase";
-
 //
 
 export default function Shipping() {
@@ -28,7 +27,7 @@ export default function Shipping() {
   } = useForm();
   const classes = useStyles();
   const router = useRouter();
-  // const { state, dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   // const {
   //   cart: { shippingAddress },
   // } = state;
@@ -44,6 +43,25 @@ export default function Shipping() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // const submitHandler = async ({
+  //   fullName,
+  //   address,
+  //   barangay,
+  //   phone,
+  //   city,
+  // }) => {
+  // dispatch({
+  //   type: "SAVE_SHIPPING_ADDRESS",
+  //   payload: { fullName, address, barangay, phone, city },
+  // }); //needs db
+  // Cookies.get("shippingAddress", {
+  //   fullName,
+  //   address,
+  //   barangay,
+  //   phone,
+  //   city,
+  // });
+
   const submitHandler = async ({
     fullName,
     address,
@@ -51,18 +69,11 @@ export default function Shipping() {
     phone,
     city,
   }) => {
-    // dispatch({
-    //   type: "SAVE_SHIPPING_ADDRESS",
-    //   payload: { fullName, address, barangay, phone, city },
-    // }); //needs db
-    // Cookies.get("shippingAddress", {
-    //   fullName,
-    //   address,
-    //   barangay,
-    //   phone,
-    //   city,
-    // });
-
+    // Create refs for both documents
+    dispatch({
+      type: "SAVE_SHIPPING_ADDRESS",
+      payload: { fullName, address, barangay, phone, city },
+    });
     const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
     //const usernameDoc = firestore.doc(usernames/${formValue});
 
@@ -71,17 +82,23 @@ export default function Shipping() {
     batch.set(userDoc, {
       id: auth.currentUser.uid,
       fullName: fullName,
-      address: "address",
-      barangay: "barangay",
-      phone: "phone",
-      city: "city",
+      address: address,
+      barangay: barangay,
+      phone: phone,
+      city: city,
     });
-    //batch.set(usernameDoc, { uid: user.uid });
+    // batch.set(usernameDoc, { uid: user.uid });
     if (!userDoc) {
       throw new Error("There was an error in uploading Shipping Address");
     }
     await batch.commit();
-    router.push("/payment");
+    Cookies.get("shippingAddress", {
+      fullName,
+      address,
+      barangay,
+      phone,
+      city,
+    });
   };
   return (
     <Layout title="Shipping Address">
