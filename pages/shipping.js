@@ -61,7 +61,7 @@ export default function Shipping() {
   //   phone,
   //   city,
   // });
-
+  const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
   const submitHandler = async ({
     fullName,
     address,
@@ -72,11 +72,7 @@ export default function Shipping() {
     // Create refs for both documents
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
-      payload: { fullName, address, barangay, phone, city },
     });
-    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
-    //const usernameDoc = firestore.doc(usernames/${formValue});
-
     // Commit both docs together as a batch write.
     const batch = firestore.batch();
     batch.set(userDoc, {

@@ -22,7 +22,8 @@ export default function ProductCard({ medicine }) {
   }
   const addToCartHandler = async (meds) => {
     const existItem = state.cart.cartItems.find((x) => x.id === meds.id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const quantity = existItem + 1; // tried to make it multiple addings
+    // ? existItem.quantity + 1 : 1
     // const { data } = await axios.get(`/api/products/${products._id}`);
     // if (data.countInstock < quantity) {
     // 	window.alert('Sorry. Product is Out of Stock');
@@ -31,10 +32,6 @@ export default function ProductCard({ medicine }) {
     dispatch({ type: "CART_ADD_ITEM", payload: { ...meds, quantity } });
     // router.push("/cart");
   };
-
-  // console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
-  // console.log(products);
-  // console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
 
   return (
     <div>

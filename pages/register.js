@@ -11,12 +11,12 @@ import Layout from "../component/Layout";
 import useStyles from "../utils/style";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import axios from "axios";
+// import axios from "axios";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import getError from "../utils/error";
+// import getError from "../utils/error";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Register() {
@@ -49,13 +49,13 @@ export default function Register() {
       createUserWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
           //Signed in
-          const user = userCredential.user;
+          const users = userCredential.user;
           // ...
-          dispatch({ type: "USER_LOGIN", payload: user });
+          dispatch({ type: "USER_LOGIN", payload: users });
+          Cookies.set(users);
         }
       );
       //needs db
-      // Cookies.set(user);
       router.push(redirect || "/");
       alert("success login");
     } catch (err) {
