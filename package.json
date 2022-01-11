@@ -15,6 +15,7 @@
     "@paypal/react-paypal-js": "^7.5.0",
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
+    "chart.js": "3.4.1",
     "firebase": "^9.6.1",
     "firebase-admin": "^4.2.1",
     "js-cookie": "^3.0.1",

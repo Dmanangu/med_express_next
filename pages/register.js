@@ -61,7 +61,7 @@ export default function Register() {
       router.push(redirect || "/");
       alert("success login");
     } catch (err) {
-      enqueueSnackbar(getError(err), { variant: "error" });
+      enqueueSnackbar("Account Creation Error");
     }
   };
   return (

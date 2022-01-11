@@ -25,18 +25,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { UserContext } from "../lib/context";
 import { logout } from "../component/firebase/useUser";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function Layout({ title, children }) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart } = state;
   const { user } = useContext(UserContext);
-
-  // const { meds } = useContext(MedContext);
-
-  // console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
-  // console.log(meds);
-  // console.log("TTTTTTTTTTTTTTRYYYYYYYYYYYYY");
 
   //will use cart function
   const theme = createTheme({
@@ -75,12 +70,16 @@ export default function Layout({ title, children }) {
   const loginMenuCloseHandler = (e, redirect) => {
     setAnchorEl(null);
     if (redirect) {
-      router.push("/");
+      router.push(e, redirect);
     }
   };
+  const auth = getAuth();
   const logoutClickHandler = () => {
     setAnchorEl(null);
     dispatch({ type: logout });
+    signOut(auth).then(() => {
+      //Sign out
+    });
     Cookies.remove(user);
     Cookies.remove("cartItems");
     router.push("/");
@@ -146,18 +145,31 @@ export default function Layout({ title, children }) {
                     onClose={loginMenuCloseHandler}
                   >
                     <MenuItem
-                    // onCLick={(e) => loginMenuCloseHandler(e, "/profile")}
+                      onClick={(e) => loginMenuCloseHandler(e, "/profile")}
                     >
-                      <NextLink href={"/profile"}>Profile</NextLink>
+                      {/* <NextLink href={"/profile"}> */}
+                      Profile
+                      {/* </NextLink> */}
                     </MenuItem>
                     <MenuItem
-                    // onCLick={(e) =>
-                    //   loginMenuCloseHandler(e, "/order-history")
-                    // }
+                      onClick={(e) =>
+                        loginMenuCloseHandler(e, "/order-history")
+                      }
                     >
-                      <NextLink href={"/order-history"}>Order History</NextLink>
+                      {/* <NextLink href={"/order-history"}> */}
+                      Order History
+                      {/* </NextLink> */}
                     </MenuItem>
-                    <MenuItem onCLick={logoutClickHandler}>Logout</MenuItem>
+                    {user.isAdmin && (
+                      <MenuItem
+                        onClick={(e) =>
+                          loginMenuCloseHandler(e, "/admin/dashboard")
+                        }
+                      >
+                        Admin Dashboard
+                      </MenuItem>
+                    )}
+                    <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
                   </Menu>
                 </>
               ) : (
