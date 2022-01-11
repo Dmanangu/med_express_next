@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import getError from "../utils/error";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Register() {
   const {
@@ -37,27 +38,24 @@ export default function Register() {
   }, []);
 
   const { redirect } = router.query; //login?redirect=/shipping
-  const submitHandler = async (
-    name,
-    email,
-    password,
-    confirmPassword,
-    phone
-  ) => {
+  const auth = getAuth();
+  const submitHandler = async (name, email, password, confirmPassword) => {
     closeSnackbar();
     if (password !== confirmPassword) {
       enqueueSnackbar("Password don't match", { variant: "error" });
       return;
     }
     try {
-      const { data } = await axios.post("/api/users/register", {
-        name,
-        email,
-        phone,
-        password,
-      });
-      dispatch({ type: "USER_LOGIN", payload: data }); //needs db
-      Cookies.set("userInfo", data);
+      createUserWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
+          //Signed in
+          const user = userCredential.user;
+          // ...
+          dispatch({ type: "USER_LOGIN", payload: user });
+        }
+      );
+      //needs db
+      // Cookies.set(user);
       router.push(redirect || "/");
       alert("success login");
     } catch (err) {
