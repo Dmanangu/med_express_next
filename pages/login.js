@@ -142,6 +142,7 @@ export default function Login() {
 
 //sign In with google
 function SignInButton() {
+  const router = useRouter();
   const signInWithGoogle = async () => {
     await auth.signInWithPopup(googleAuthProvider);
     // Create refs for both documents
@@ -158,6 +159,9 @@ function SignInButton() {
     //batch.set(usernameDoc, { uid: user.uid });
     if (!userDoc) {
       throw new Error("There was an error in Login");
+    }
+    if (userDoc) {
+      router.push("/");
     }
     await batch.commit();
   };

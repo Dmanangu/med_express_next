@@ -13,6 +13,8 @@ import { useContext } from "react";
 import { Store } from "../../utils/Store";
 // import { useRouter } from "next/router";
 
+//
+
 export default function ProductCard({ medicine }) {
   //   const router = useRouter();
   const { state, dispatch } = useContext(Store);
@@ -22,13 +24,8 @@ export default function ProductCard({ medicine }) {
   }
   const addToCartHandler = async (meds) => {
     const existItem = state.cart.cartItems.find((x) => x.id === meds.id);
-    const quantity = existItem + 1; // tried to make it multiple addings
-    // ? existItem.quantity + 1 : 1
-    // const { data } = await axios.get(`/api/products/${products._id}`);
-    // if (data.countInstock < quantity) {
-    // 	window.alert('Sorry. Product is Out of Stock');
-    // 	return;
-    // }
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+
     dispatch({ type: "CART_ADD_ITEM", payload: { ...meds, quantity } });
     // router.push("/cart");
   };

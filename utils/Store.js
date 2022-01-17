@@ -31,11 +31,11 @@ function reducer(state, action) {
     case "CART_ADD_ITEM": {
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
-        (item) => item.name === newItem.name
+        (meds) => meds.prodName === newItem.prodName
       );
       const cartItems = existItem
-        ? state.cart.cartItems.map((item) =>
-            item.name === existItem.name ? newItem : item
+        ? state.cart.cartItems.map((meds) =>
+            meds.prodName === existItem.prodName ? newItem : meds
           )
         : [...state.cart.cartItems, newItem];
       Cookies.set("cartItems", JSON.stringify(cartItems));

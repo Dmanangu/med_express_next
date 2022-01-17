@@ -24,29 +24,29 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
+//
+
+//
 function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
-  const updateCartHandler = async (item, quantity) => {
+  const updateCartHandler = async (meds, quantity) => {
     // const { meds } = await axios.get(`/api/products/${item.id}`);
-    // if (meds.countInStock <= 0) {
-    //   window.alert("Sorry. Product is out of Stock");
-    //   return;
-    // }
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+    if (meds.quantity <= 0) {
+      window.alert("Sorry. Product is out of Stock");
+      return;
+    }
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...meds, quantity } });
   };
-  const removeItemHandler = (item) => {
-    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+  const removeItemHandler = (meds) => {
+    dispatch({ type: "CART_REMOVE_ITEM", payload: meds });
   };
   const checkoutHandler = () => {
     router.push("/shipping");
   };
-  console.log("CartItems is here");
-  console.log(cartItems);
-  console.log("CartItems is here");
   return (
     <Layout title="Shopping Cart">
       <Typography component="h1" variant="h1">
@@ -74,45 +74,45 @@ function CartScreen() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {cartItems.map((item) => (
-                    <TableRow key={item.id}>
+                  {cartItems.map((meds) => (
+                    <TableRow key={meds.id}>
                       <TableCell>
                         <Image
                           component="img"
-                          src={item.imageUrl}
+                          src={meds.imageUrl}
                           height={40}
                           width={40}
-                          title={item.prodName}
+                          title={meds.prodName}
                           alt="no image"
                         />
                       </TableCell>
 
                       <TableCell>
                         <Link>
-                          <Typography>{item.prodName}</Typography>
+                          <Typography>{meds.prodName}</Typography>
                         </Link>
                       </TableCell>
                       <TableCell>
                         <Select
-                          value={item.quantity}
+                          value={meds.quantity}
                           onChange={(e) =>
-                            updateCartHandler(item, e.target.value)
+                            updateCartHandler(meds, e.target.value)
                           }
                         >
                           {/* need to change so that it can add more than 1 quantity */}
-                          {[...Array(item.countInStock).keys()].map((x) => (
+                          {[...Array(meds.quantity).keys()].map((x) => (
                             <MenuItem key={x + 1} value={x + 1}>
                               {x + 1}
                             </MenuItem>
                           ))}
                         </Select>
                       </TableCell>
-                      <TableCell align="right">₱{item.price}</TableCell>
+                      <TableCell align="right">₱{meds.price}</TableCell>
                       <TableCell align="right">
                         <Button
                           variant="contained"
                           color="secondary"
-                          onClick={() => removeItemHandler(item)}
+                          onClick={() => removeItemHandler(meds)}
                         >
                           Remove Item
                         </Button>
