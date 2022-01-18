@@ -33,6 +33,15 @@ function CartScreen() {
   const {
     cart: { cartItems },
   } = state;
+
+  const addToCartHandler = async (meds) => {
+    const existItem = state.cart.cartItems.find((x) => x.id === meds.id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...meds, quantity } });
+    // router.push("/cart");
+  };
+
   const updateCartHandler = async (meds, quantity) => {
     // const { meds } = await axios.get(`/api/products/${item.id}`);
     if (meds.quantity <= 0) {
@@ -68,6 +77,7 @@ function CartScreen() {
                   <TableRow>
                     <TableCell>Image</TableCell>
                     <TableCell>Name</TableCell>
+                    <TableCell aligh="right"> </TableCell>
                     <TableCell aligh="right">Quantity</TableCell>
                     <TableCell align="right">Price</TableCell>
                     <TableCell align="right">Action</TableCell>
@@ -91,6 +101,16 @@ function CartScreen() {
                         <Link>
                           <Typography>{meds.prodName}</Typography>
                         </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          // fullWidth
+                          variant="contained"
+                          color="primary"
+                          onClick={() => addToCartHandler(meds)}
+                        >
+                          add
+                        </Button>
                       </TableCell>
                       <TableCell>
                         <Select
