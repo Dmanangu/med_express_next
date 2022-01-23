@@ -5,17 +5,31 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "../component/Layout";
 import useStyles from "../utils/style";
 import { useRouter } from "next/router";
 import { Store } from "../utils/Store";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import CheckoutWizzard from "../component/CheckoutWizzard";
 import { UserContext } from "../lib/context";
-import { auth, firestore } from "../lib/firebase";
-//
+import { auth, firestore, postToJSON } from "../lib/firebase";
+// import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+
+// export async function getServerSideProps() {
+//   const postsQuery = firestore.collectionGroup("users");
+//   // .where('published', '==', true)
+//   // .orderBy('createdAt', 'desc')
+//   // .limit(LIMIT);
+
+//   const posts = (await postsQuery.get()).docs.map(postToJSON);
+//   // console.log(posts);
+//   return {
+//     props: { posts }, // will be passed to the page component as props
+//   };
+// }
 
 export default function Shipping() {
   const { user } = useContext(UserContext);
@@ -23,7 +37,7 @@ export default function Shipping() {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
+    // setValue,
   } = useForm();
   const classes = useStyles();
   const router = useRouter();
@@ -43,6 +57,7 @@ export default function Shipping() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
   // const submitHandler = async ({
   //   fullName,
   //   address,
@@ -50,10 +65,25 @@ export default function Shipping() {
   //   phone,
   //   city,
   // }) => {
+  // Create refs for both documents
   // dispatch({
   //   type: "SAVE_SHIPPING_ADDRESS",
-  //   payload: { fullName, address, barangay, phone, city },
-  // }); //needs db
+  // });
+  // Commit both docs together as a batch write.
+  // const batch = firestore.batch();
+  // batch.set(userDoc, {
+  //   id: auth.currentUser.uid,
+  //   fullName: fullName,
+  //   address: address,
+  //   barangay: barangay,
+  //   phone: phone,
+  //   city: city,
+  // });
+  // batch.set(usernameDoc, { uid: user.uid });
+  // if (!userDoc) {
+  //   throw new Error("There was an error in uploading Shipping Address");
+  // }
+  // await batch.commit();
   // Cookies.get("shippingAddress", {
   //   fullName,
   //   address,
@@ -61,45 +91,44 @@ export default function Shipping() {
   //   phone,
   //   city,
   // });
-  const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
-  const submitHandler = async ({
+  // };
+  // const [posts, setPosts] = useState(props.posts);
+
+  // const usersClient = posts.filter((shippingAddress) => {
+  //   return shippingAddress;
+  // });
+  // const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+
+  const sendShippingData = async ({
     fullName,
     address,
     barangay,
     phone,
     city,
   }) => {
-    // Create refs for both documents
-    dispatch({
-      type: "SAVE_SHIPPING_ADDRESS",
-    });
-    // Commit both docs together as a batch write.
-    const batch = firestore.batch();
-    batch.set(userDoc, {
-      id: auth.currentUser.uid,
-      fullName: fullName,
-      address: address,
-      barangay: barangay,
-      phone: phone,
-      city: city,
-    });
-    // batch.set(usernameDoc, { uid: user.uid });
-    if (!userDoc) {
-      throw new Error("There was an error in uploading Shipping Address");
+    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+    try {
+      const batch = firestore.batch();
+      batch
+        .set(userDoc, {
+          id: auth.currentUser.uid,
+          fullName: fullName,
+          address: address,
+          barangay: barangay,
+          phone: phone,
+          city: city,
+        })
+        .then(alert("Shipping Address was saved"));
+      dispatch({ type: "SAVE_SHIPPING_ADDRESS" });
+    } catch (error) {
+      console.log(error);
+      alert(error);
     }
-    await batch.commit();
-    Cookies.get("shippingAddress", {
-      fullName,
-      address,
-      barangay,
-      phone,
-      city,
-    });
   };
   return (
     <Layout title="Shipping Address">
       <CheckoutWizzard activeStep={1} />
-      <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
+      <form onSubmit={handleSubmit(sendShippingData)} className={classes.form}>
         <Typography component="h1" variant="h1">
           Shipping Address
         </Typography>
@@ -254,7 +283,7 @@ export default function Shipping() {
               type="submit"
               fullWidth
               color="primary"
-              onClick={submitHandler}
+              // onClick={sendShippingData}
             >
               Continue
             </Button>
@@ -288,8 +317,14 @@ function Continue({ fullName, address, barangay, phone, city }) {
     await batch.commit();
   };
   return (
-    <Button onClick={signInWithGoogle} variant="contained">
-      Sign in with Google
+    <Button
+      variant="contained"
+      type="submit"
+      fullWidth
+      color="primary"
+      onClick={signInWithGoogle}
+    >
+      Continue
     </Button>
   );
 }

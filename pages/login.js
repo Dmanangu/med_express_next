@@ -39,12 +39,14 @@ export default function Login() {
 
   const classes = useStyles();
   const submitHandler = async ({ email, password }) => {
+    //palitan ng firebase
     closeSnackbar();
     try {
       const { data } = await axios.post("/api/users/login", {
         email,
         password,
       });
+      //palitan ng firebase
       dispatch({ type: "USER_LOGIN", payload: data });
       Cookies.set("userInfo", data);
       router.push(redirect || "/");

@@ -3,7 +3,6 @@ import { Store } from "../utils/Store";
 import Layout from "../component/Layout";
 import dynamic from "next/dynamic";
 import {
-  Link,
   Grid,
   Table,
   TableBody,
@@ -19,7 +18,7 @@ import {
   CircularProgress,
   CardMedia,
 } from "@material-ui/core";
-import NextLink from "next/link";
+
 import { useRouter } from "next/router";
 import useStyles from "../utils/style";
 import CheckoutWizzard from "../component/CheckoutWizzard";
@@ -28,15 +27,33 @@ import { getError } from "../utils/error";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "../lib/context";
-import { shipContext } from "../lib/context";
+import { postToJSON, firestore } from "../lib/firebase";
 
-function PlaceOrder() {
+export async function getServerSideProps() {
+  const postsQuery = firestore.collectionGroup("shippingAddress");
+  // .where('published', '==', true)
+  // .orderBy('createdAt', 'desc')
+  // .limit(LIMIT);
+
+  const posts = (await postsQuery.get()).docs.map(postToJSON);
+  // console.log(posts);
+  return {
+    props: { posts }, // will be passed to the page component as props
+  };
+}
+
+function PlaceOrder(props) {
+  const [posts, setPosts] = useState(props.posts);
+
+  const shippingClient = posts.filter((shippingAddress) => {
+    return shippingAddress.id.toLowerCase().includes(shippingAddress.id);
+  });
+
   const classes = useStyles();
   const router = useRouter();
   const { user } = useContext(UserContext);
   const { state, dispatch } = useContext(Store);
   const {
-    userInfo,
     cart: { cartItems, paymentMethod },
   } = state;
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; //123.456 -> 123.46
@@ -55,7 +72,7 @@ function PlaceOrder() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { closeSnackBar, enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const placeOrderHandler = async () => {
     // closeSnackBar();
@@ -89,7 +106,7 @@ function PlaceOrder() {
       enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
-  const { ship } = useContext(shipContext);
+
   return (
     <Layout title="Place Order">
       <CheckoutWizzard activeStep={3}></CheckoutWizzard>
@@ -105,12 +122,15 @@ function PlaceOrder() {
                   Shipping Address
                 </Typography>
               </ListItem>
-              <ListItem>
-                {/* This should be added in the database */}
-                {/* {shippingAddress.fullName},{shippingAddress.address},
-                {shippingAddress.barangay},{shippingAddress.phone},
-                {shippingAddress.city} */}
-              </ListItem>
+              {shippingClient.map((shipping) => (
+                <ListItem key={shipping.id}>
+                  <Typography>{shipping.fullName}</Typography>
+                  <Typography>{shipping.phone}</Typography>
+                  <Typography>{shipping.address}</Typography>
+                  <Typography>{shipping.barangay}</Typography>
+                  <Typography>{shipping.city}</Typography>
+                </ListItem>
+              ))}
             </List>
           </Card>
           <Card className={classes.section}>

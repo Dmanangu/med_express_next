@@ -74,9 +74,11 @@ function AdminProdcuts() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
+        //database firestore
         const { data } = await axios.get(`/api/admin/products`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
+        //database firestore
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -105,7 +107,9 @@ function AdminProdcuts() {
       );
       dispatch({ type: "CREATE_SUCCESS" });
       enqueueSnackbar("Product created successfully", { variant: "success" });
+      //database firestore
       router.push(`/admin/product/${data.product._id}`);
+      //database firestore
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
       enqueueSnackbar(getError(err), { variant: "error" });

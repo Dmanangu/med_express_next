@@ -78,10 +78,12 @@ function UserEdit({ params }) {
     } else {
       const fetchData = async () => {
         try {
+          //database firestore
           dispatch({ type: "FETCH_REQUEST" });
           const { data } = await axios.get(`/api/admin/users/${userId}`, {
             headers: { authorization: `Bearer ${userInfo.token}` },
           });
+          //database firestore
           setIsAdmin(data.isAdmin);
           dispatch({ type: "FETCH_SUCCESS" });
           setValue("name", data.name);
@@ -97,6 +99,7 @@ function UserEdit({ params }) {
     closeSnackbar();
     try {
       dispatch({ type: "UPDATE_REQUEST" });
+      //database firestore
       await axios.put(
         `/api/admin/users/${userId}`,
         {
@@ -105,6 +108,7 @@ function UserEdit({ params }) {
         },
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
+      //database firestore
       dispatch({ type: "UPDATE_SUCCESS" });
       enqueueSnackbar("User updated successfully", { variant: "success" });
       router.push("/admin/users");

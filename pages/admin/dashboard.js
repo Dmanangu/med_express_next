@@ -52,10 +52,12 @@ function AdminDashboard() {
     // }
     const fetchData = async () => {
       try {
+        //database firestore
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/admin/summary`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
+        //database firestore
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
