@@ -23,14 +23,14 @@ export default function Payment() {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
   const { state, dispatch } = useContext(Store);
-  const {
-    cart: { shippingAddress },
-  } = state;
+  // const {
+  //   cart: { shippingAddress },
+  // } = state;
   useEffect(() => {
     // if (!shippingAddress.address) {
     //   router.push("/shipping");
     // } else {
-    //   setPaymentMethod(Cookies.get("paymentMethod") || "");
+    // setPaymentMethod(Cookies.get("paymentMethod") || "");
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

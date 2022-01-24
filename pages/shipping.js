@@ -17,6 +17,7 @@ import { UserContext } from "../lib/context";
 import { auth, firestore, postToJSON } from "../lib/firebase";
 // import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import firebase from "firebase/compat/app";
 
 // export async function getServerSideProps() {
 //   const postsQuery = firestore.collectionGroup("users");
@@ -46,9 +47,9 @@ export default function Shipping() {
   //   cart: { shippingAddress },
   // } = state;
   useEffect(() => {
-    if (!user) {
-      router.push("/login?redirect=/shipping");
-    }
+    // if (!user) {
+    //   router.push("/login?redirect=/shipping");
+    // }
     // setValue("fullName", shippingAddress.fullName);
     // setValue("address", shippingAddress.address);
     // setValue("barangay", shippingAddress.barangay);
@@ -106,11 +107,13 @@ export default function Shipping() {
     phone,
     city,
   }) => {
-    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+    //const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
     try {
-      const batch = firestore.batch();
-      batch
-        .set(userDoc, {
+      firebase
+        .firestore()
+        .collection("shippingAddress")
+        .doc(auth.currentUser.uid)
+        .set({
           id: auth.currentUser.uid,
           fullName: fullName,
           address: address,
@@ -118,8 +121,8 @@ export default function Shipping() {
           phone: phone,
           city: city,
         })
-        .then(alert("Shipping Address was saved"));
-      dispatch({ type: "SAVE_SHIPPING_ADDRESS" });
+        .then(alert("Data was successfully sent to cloud firestore!"));
+      router.push("/payment");
     } catch (error) {
       console.log(error);
       alert(error);
@@ -294,37 +297,35 @@ export default function Shipping() {
   );
 }
 
-function Continue({ fullName, address, barangay, phone, city }) {
-  const signInWithGoogle = async () => {
-    // Create refs for both documents
-    const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
-    //const usernameDoc = firestore.doc(usernames/${formValue});
-
-    // Commit both docs together as a batch write.
-    const batch = firestore.batch();
-    batch.set(userDoc, {
-      id: auth.currentUser.uid,
-      fullName: fullName,
-      address: address,
-      barangay: barangay,
-      phone: phone,
-      city: city,
-    });
-    //batch.set(usernameDoc, { uid: user.uid });
-    if (!userDoc) {
-      throw new Error("There was an error in uploading Shipping Address");
-    }
-    await batch.commit();
-  };
-  return (
-    <Button
-      variant="contained"
-      type="submit"
-      fullWidth
-      color="primary"
-      onClick={signInWithGoogle}
-    >
-      Continue
-    </Button>
-  );
-}
+// function Continue({ fullName, address, barangay, phone, city }) {
+//   const sendData = (fullname, address, barangay, phone, city) => {
+//     try {
+//       firebase
+//         .firestore()
+//         .collection("shippingAddress")
+//         .doc(auth.currentUser.uid)
+//         .set({
+//           fullName: fullname,
+//           address: address,
+//           barangay: barangay,
+//           phone: phone,
+//           city: city,
+//         })
+//         .then(alert("Data was successfully sent to cloud firestore!"));
+//     } catch (error) {
+//       console.log(error);
+//       alert(error);
+//     }
+//   };
+//   return (
+//     <Button
+//       variant="contained"
+//       type="submit"
+//       fullWidth
+//       color="primary"
+//       onClick={signInWithGoogle}
+//     >
+//       Continue
+//     </Button>
+//   );
+// }

@@ -46,7 +46,7 @@ export default function Register() {
       return;
     }
     try {
-      createUserWithEmailAndPassword(auth, email, password).then(
+      createUserWithEmailAndPassword(auth, email, password, name).then(
         (userCredential) => {
           //Signed in
           const users = userCredential.user;

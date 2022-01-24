@@ -1,17 +1,20 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import { auth } from "../lib/firebase";
 
 const WriteToCloudFireStore = () => {
-  const sendData = () => {
+  const sendData = (fullname, address, barangay, phone, city) => {
     try {
       firebase
         .firestore()
-        .collection("users")
-        .doc("users")
+        .collection("shippingAddress")
+        .doc(auth.currentUser.uid)
         .set({
-          displayName: "Robin",
-          email: "Robin@gmail.com",
-          tel: "+639454122501",
+          fullName: fullname,
+          address: address,
+          barangay: barangay,
+          phone: phone,
+          city: city,
         })
         .then(alert("Data was successfully sent to cloud firestore!"));
     } catch (error) {

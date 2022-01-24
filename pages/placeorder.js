@@ -27,7 +27,11 @@ import { getError } from "../utils/error";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "../lib/context";
-import { postToJSON, firestore } from "../lib/firebase";
+import { auth, postToJSON, firestore } from "../lib/firebase";
+import "firebase/compat/firestore";
+import firebase from "firebase/compat/app";
+
+//
 
 export async function getServerSideProps() {
   const postsQuery = firestore.collectionGroup("shippingAddress");
@@ -36,7 +40,9 @@ export async function getServerSideProps() {
   // .limit(LIMIT);
 
   const posts = (await postsQuery.get()).docs.map(postToJSON);
-  // console.log(posts);
+  console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
+  console.log(posts);
+  console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
   return {
     props: { posts }, // will be passed to the page component as props
   };
@@ -45,9 +51,16 @@ export async function getServerSideProps() {
 function PlaceOrder(props) {
   const [posts, setPosts] = useState(props.posts);
 
+  // console.log("KKKKKKKKKKKKKKKKKKKKKK");
+  // console.log(shippingClient);
+  // console.log(posts);
   const shippingClient = posts.filter((shippingAddress) => {
-    return shippingAddress.id.toLowerCase().includes(shippingAddress.id);
+    return shippingAddress.id.includes(auth.currentUser.uid);
   });
+
+  console.log("KKKKKKKKKKKKKKKKKKKKKK");
+  console.log(shippingClient);
+  console.log("KKKKKKKKKKKKKKKKKKKKKK");
 
   const classes = useStyles();
   const router = useRouter();
@@ -80,22 +93,37 @@ function PlaceOrder(props) {
       setLoading(true);
       //data is from data base
       // must be posted to firebase
-      const { data } = await axios.post(
-        "/api/order",
-        {
+      // const { data } = await axios.post(
+      //   "/api/order",
+      //   {
+      //     orderItem: cartItems,
+      //     shippingPrice,
+      //     paymentMethod,
+      //     itemsPrice,
+      //     taxPrice,
+      //     totalPrice,
+      //   },
+      //   {
+      //     headers: {
+      //       authorization: `Bearer ${user.token}`,
+      //     },
+      //   }
+      // );
+      firebase
+        .firestore()
+        .collection("receipt")
+        .doc(auth.currentUser.uid)
+        .set({
+          id: auth.currentUser.uid,
           orderItem: cartItems,
-          shippingPrice,
           paymentMethod,
           itemsPrice,
           taxPrice,
           totalPrice,
-        },
-        {
-          headers: {
-            authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+        })
+        .then(
+          alert("Your receipt has been generated. Thank you for shopping.")
+        );
       dispatch({ type: "CART_CLEAR" });
       Cookies.remove("cartItems");
       setLoading(false);
@@ -124,11 +152,23 @@ function PlaceOrder(props) {
               </ListItem>
               {shippingClient.map((shipping) => (
                 <ListItem key={shipping.id}>
-                  <Typography>{shipping.fullName}</Typography>
-                  <Typography>{shipping.phone}</Typography>
-                  <Typography>{shipping.address}</Typography>
-                  <Typography>{shipping.barangay}</Typography>
-                  <Typography>{shipping.city}</Typography>
+                  <Typography>
+                    <b>Name:</b> {shipping.fullName}
+                  </Typography>
+                  <Typography>
+                    <b>Phone Number:</b> {shipping.phone}
+                  </Typography>
+                  <Typography>
+                    <b>Shipping Address:</b>
+                    {shipping.address}
+                  </Typography>
+                  <Typography>
+                    <b>Barangay:</b> {shipping.barangay}
+                  </Typography>
+                  <Typography>
+                    <b>Municipality/City: </b>
+                    {shipping.city}
+                  </Typography>
                 </ListItem>
               ))}
             </List>
