@@ -70,7 +70,7 @@ export default function Layout({ title, children }) {
   const loginMenuCloseHandler = (e, redirect) => {
     setAnchorEl(null);
     if (redirect) {
-      router.push(redirect);
+      router.push("/");
     }
   };
   const auth = getAuth();

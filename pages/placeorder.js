@@ -78,6 +78,7 @@ function PlaceOrder(props) {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   useEffect(() => {
     if (!paymentMethod) {
+      alert("No Payment Method Yet");
       router.push("/payment");
     }
     if (cartItems.length === 0) {

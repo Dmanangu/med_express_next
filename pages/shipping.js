@@ -47,9 +47,9 @@ export default function Shipping() {
   //   cart: { shippingAddress },
   // } = state;
   useEffect(() => {
-    // if (!user) {
-    //   router.push("/login?redirect=/shipping");
-    // }
+    if (!user) {
+      router.push("/login?redirect=/shipping");
+    }
     // setValue("fullName", shippingAddress.fullName);
     // setValue("address", shippingAddress.address);
     // setValue("barangay", shippingAddress.barangay);
@@ -108,6 +108,9 @@ export default function Shipping() {
     city,
   }) => {
     //const userDoc = firestore.doc(`shippingAddress/${auth.currentUser.uid}`);
+    dispatch({
+      type: "SAVE_SHIPPING_ADDRESS",
+    });
     try {
       firebase
         .firestore()
@@ -121,7 +124,7 @@ export default function Shipping() {
           phone: phone,
           city: city,
         })
-        .then(alert("Data was successfully sent to cloud firestore!"));
+        .then(alert("The Shipping Address was now saved."));
       router.push("/payment");
     } catch (error) {
       console.log(error);
