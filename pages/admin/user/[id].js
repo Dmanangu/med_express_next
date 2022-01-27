@@ -133,11 +133,11 @@ function UserEdit({ params }) {
                   <ListItemText primary="Orders"></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/admin/products" passHref>
+              {/* <NextLink href="/admin/products" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Products"></ListItemText>
-                </ListItem>
-              </NextLink>
+                </ListItem> */}
+              {/* </NextLink> */}
               <NextLink href="/admin/users" passHref>
                 <ListItem selected button component="a">
                   <ListItemText primary="Users"></ListItemText>

@@ -242,24 +242,20 @@ function Order(params, props) {
                         {orderItems.map((item) => (
                           <TableRow key={item.id}>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Image
-                                    src={item.image}
-                                    alt={item.name}
-                                    width={50}
-                                    height={50}
-                                  ></Image>
-                                </Link>
-                              </NextLink>
+                              <Link>
+                                <Image
+                                  src={item.image}
+                                  alt={item.name}
+                                  width={50}
+                                  height={50}
+                                ></Image>
+                              </Link>
                             </TableCell>
 
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Typography>{item.name}</Typography>
-                                </Link>
-                              </NextLink>
+                              <Link>
+                                <Typography>{item.name}</Typography>
+                              </Link>
                             </TableCell>
                             <TableCell align="right">
                               <Typography>{item.quantity}</Typography>
