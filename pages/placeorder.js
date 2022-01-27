@@ -39,9 +39,9 @@ export async function getServerSideProps() {
   // .limit(LIMIT);
 
   const posts = (await postsQuery.get()).docs.map(postToJSON);
-  console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
-  console.log(posts);
-  console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
+  // console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
+  // console.log(posts);
+  // console.log("LLLLLLLLLLLLLLLLLLLLLLLL");
   return {
     props: { posts }, // will be passed to the page component as props
   };
@@ -57,9 +57,9 @@ function PlaceOrder(props) {
     return shippingAddress.id.includes(auth.currentUser.uid);
   });
 
-  console.log("KKKKKKKKKKKKKKKKKKKKKK");
-  console.log(shippingClient);
-  console.log("KKKKKKKKKKKKKKKKKKKKKK");
+  // console.log("KKKKKKKKKKKKKKKKKKKKKK");
+  // console.log(shippingClient);
+  // console.log("KKKKKKKKKKKKKKKKKKKKKK");
 
   const classes = useStyles();
   const router = useRouter();
@@ -122,9 +122,7 @@ function PlaceOrder(props) {
           shippingPrice,
           totalPrice,
         })
-        .then(
-          alert("Your receipt has been generated. Thank you for shopping.")
-        );
+        .then(alert("Your order has been generated. Thank you for shopping."));
       dispatch({ type: "CART_CLEAR" });
       Cookies.remove("cartItems");
       setLoading(false);

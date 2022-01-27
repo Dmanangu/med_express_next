@@ -121,7 +121,8 @@ function Order(params, props) {
       const loadPayPalScript = async () => {
         const { data: clientId } = await axios.get("/api/keys/paypal", {
           headers: { authorization: `Bearer ${user.token}` },
-        });
+        }); //change this to firebase database
+
         paypalDispatch({
           type: "resetOptions",
           value: {

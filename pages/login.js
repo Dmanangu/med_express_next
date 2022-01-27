@@ -135,9 +135,10 @@ export default function Login() {
               <Link>Register</Link>
             </NextLink>
           </ListItem>
+           <SignInButton />
         </List>
       </form>
-      <SignInButton />
+     
     </Layout>
   );
 }
