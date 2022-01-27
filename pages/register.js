@@ -84,6 +84,7 @@ export default function Register() {
                   fullWidth
                   id="name"
                   label="Name"
+                  type={"name"}
                   inputProps={{ type: "name" }}
                   error={Boolean(errors.name)}
                   helperText={
@@ -114,6 +115,7 @@ export default function Register() {
                   fullWidth
                   id="email"
                   label="Email"
+                  type={"email"}
                   inputProps={{ type: "email" }}
                   error={Boolean(errors.email)}
                   helperText={
@@ -143,6 +145,7 @@ export default function Register() {
                   fullWidth
                   id="password"
                   label="Password"
+                  type={"password"}
                   inputProps={{ type: "password" }}
                   error={Boolean(errors.password)}
                   helperText={

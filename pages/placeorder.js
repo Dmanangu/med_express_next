@@ -16,7 +16,6 @@ import {
   ListItem,
   Card,
   CircularProgress,
-  CardMedia,
 } from "@material-ui/core";
 
 import { useRouter } from "next/router";
@@ -24,7 +23,7 @@ import useStyles from "../utils/style";
 import CheckoutWizzard from "../component/CheckoutWizzard";
 import { useSnackbar } from "notistack";
 import { getError } from "../utils/error";
-import axios from "axios";
+// import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "../lib/context";
 import { auth, postToJSON, firestore } from "../lib/firebase";
@@ -49,7 +48,7 @@ export async function getServerSideProps() {
 }
 
 function PlaceOrder(props) {
-  const [posts, setPosts] = useState(props.posts);
+  const [posts] = useState(props.posts);
 
   // console.log("KKKKKKKKKKKKKKKKKKKKKK");
   // console.log(shippingClient);
@@ -120,6 +119,7 @@ function PlaceOrder(props) {
           paymentMethod,
           itemsPrice,
           taxPrice,
+          shippingPrice,
           totalPrice,
         })
         .then(
@@ -206,12 +206,13 @@ function PlaceOrder(props) {
                       {cartItems.map((item) => (
                         <TableRow key={item.id}>
                           <TableCell>
-                            <CardMedia
-                              component="img"
-                              image={item.imageUrl}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              // component="img"
+                              src={item.imageUrl}
                               height={50}
                               width={50}
-                              title={item.prodName}
+                              alt={item.prodName}
                             />
                           </TableCell>
 

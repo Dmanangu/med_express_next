@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../utils/Store";
 import Layout from "../../component/Layout";
 import dynamic from "next/dynamic";
@@ -25,6 +25,8 @@ import { useSnackbar } from "notistack";
 import { getError } from "../../utils/error";
 import axios from "axios";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { UserContext } from "../../lib/context";
+import { auth, postToJSON, firestore } from "../../lib/firebase";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -47,21 +49,43 @@ function reducer(state, action) {
 
 //TAKE NOTE: only Authenticated User can see this
 
-function Order(params) {
+//Firebase
+
+// export async function getServerSideProps() {
+//   const postsQuery = firestore.collectionGroup("shippingAddress");
+//   // .where('published', '==', true)
+//   // .orderBy('createdAt', 'desc')
+//   // .limit(LIMIT);
+
+//   const posts = (await postsQuery.get()).docs.map(postToJSON);
+//   return {
+//     props: { posts }, // will be passed to the page component as props
+//   };
+// }
+
+function Order(params, props) {
   const orderId = params.id; // id here is equal to the [id].js name
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const classes = useStyles();
   const router = useRouter();
-  const { state } = useContext(Store);
-  const { userInfo } = state;
+  // const { state } = useContext(Store);
+  // const { userInfo } = state;
+
+  const [posts, setPosts] = useState(props.posts);
+
+  //
 
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
     order: {},
     error: "",
   });
+  //Firebase Shipping Address
+  // const shippingClient = posts.filter((shippingAddress) => {
+  //   return shippingAddress.id.includes(auth.currentUser.uid);
+  // });
+  //Firebase Shipping Address
   const {
-    shippingAddress,
     paymentMethod,
     orderItems,
     itemsPrice,
@@ -74,15 +98,16 @@ function Order(params) {
     deliveredAt,
   } = order;
 
+  const { user } = useContext(UserContext);
   useEffect(() => {
-    if (!userInfo) {
+    if (!user) {
       return router.push("/login");
     }
     const fetchOrder = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/${orderId}`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
+          headers: { authorization: `Bearer ${user.token}` },
         }); //making the orders section to be seen but by authorize user only
         dispatch({ type: "FETCH_SUCCESS", payload: data }); //data here is from Database
       } catch (err) {
@@ -95,7 +120,7 @@ function Order(params) {
     } else {
       const loadPayPalScript = async () => {
         const { data: clientId } = await axios.get("/api/keys/paypal", {
-          headers: { authorization: `Bearer ${userInfo.token}` },
+          headers: { authorization: `Bearer ${user.token}` },
         });
         paypalDispatch({
           type: "resetOptions",
@@ -132,7 +157,7 @@ function Order(params) {
           `/api/orders/${order._id}/pay`,
           details,
           {
-            headers: { authorization: `Bearer ${userInfo.token}` },
+            headers: { authorization: `Bearer ${user.token}` },
           }
         );
         dispatch({ type: "PAY_SUCCESS", payload: data });
@@ -166,12 +191,12 @@ function Order(params) {
                     Shipping Address
                   </Typography>
                 </ListItem>
-                <ListItem>
-                  {/* This should be added in the database */}
-                  {shippingAddress.fullName},{shippingAddress.address},
-                  {shippingAddress.barangay},{shippingAddress.phone},
-                  {shippingAddress.city}
-                </ListItem>
+                {/* {shippingClient.map((shipping) => (
+                  <ListItem key={shipping.id}>
+                    {shipping.fullName},{shipping.phone},{shipping.address},
+                    {shipping.barangay},{shipping.city}
+                  </ListItem>
+                ))} */}
                 <ListItem>
                   Status:
                   {isDelivered

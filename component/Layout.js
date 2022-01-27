@@ -145,20 +145,20 @@ export default function Layout({ title, children }) {
                     onClose={loginMenuCloseHandler}
                   >
                     <MenuItem
-                      onClick={(e) => loginMenuCloseHandler(e, "/profile")}
+                    // onClick={(e) => loginMenuCloseHandler(e, "/profile")}
                     >
-                      {/* <NextLink href={"/profile"}> */}
-                      Profile
-                      {/* </NextLink> */}
+                      <NextLink href={"/profile"} passHref>
+                        Profile
+                      </NextLink>
                     </MenuItem>
                     <MenuItem
-                      onClick={(e) =>
-                        loginMenuCloseHandler(e, "/order-history")
-                      }
+                    // onClick={(e) =>
+                    //   loginMenuCloseHandler(e, "/order-history")
+                    // }
                     >
-                      {/* <NextLink href={"/order-history"}> */}
-                      Order History
-                      {/* </NextLink> */}
+                      <NextLink href={"/order-history"} passHref>
+                        Order History
+                      </NextLink>
                     </MenuItem>
                     {user.isAdmin && (
                       <MenuItem
