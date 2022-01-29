@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { Store } from "../../utils/Store";
+// import { Store } from '../../utils/Store';
 import Layout from "../../component/Layout";
 import dynamic from "next/dynamic";
 import {
@@ -17,8 +17,8 @@ import {
   Card,
   CircularProgress,
 } from "@material-ui/core";
-import NextLink from "next/link";
-import Image from "next/image";
+// import NextLink from 'next/link';
+// import Image from 'next/image';
 import { useRouter } from "next/router";
 import useStyles from "../../utils/style";
 import { useSnackbar } from "notistack";
@@ -30,19 +30,16 @@ import { auth, postToJSON, firestore } from "../../lib/firebase";
 
 export async function getServerSideProps() {
   const postsQuery = firestore.collectionGroup("orders");
+  const postsQuery2 = firestore.collectionGroup("shippingAddress");
   // .where('published', '==', true)
   // .orderBy('createdAt', 'desc')
   // .limit(LIMIT);
 
-  console.log("VVVVVVVVVVVVVVVVVVVVVVV");
-  console.log("VVVVVVVVVVVVVVVVVVVVVVV");
-
   const posts = (await postsQuery.get()).docs.map(postToJSON);
-  console.log("VVVVVVVVVVVVVVVVVVVVVVV");
-  console.log(posts);
-  console.log("VVVVVVVVVVVVVVVVVVVVVVV");
+  const posts2 = (await postsQuery2.get()).docs.map(postToJSON);
+
   return {
-    props: { posts }, // will be passed to the page component as props
+    props: { posts, posts2 }, // will be passed to the page component as props
   };
 }
 
@@ -78,11 +75,20 @@ function Order(props) {
   // const { userInfo } = state;
 
   const [posts, setPosts] = useState(props.posts);
+  const [posts2, setPosts2] = useState(props.posts2);
 
   //
-  const orderItem = posts.filter((orders) => {
+
+  const unfilterdOrderItem = posts.filter((orders) => {
     return orders.user_id.includes(auth.currentUser.uid);
   });
+  const orderItem = unfilterdOrderItem.filter((orders) => {
+    return orders.id.includes(id);
+  });
+  const shippingClient = posts2.filter((shippingAddress) => {
+    return shippingAddress.id.includes(auth.currentUser.uid);
+  });
+  console.log(shippingClient);
 
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -196,12 +202,14 @@ function Order(props) {
                   Shipping Address
                 </Typography>
               </ListItem>
-              {/* {shippingClient.map((shipping) => (
-                  <ListItem key={shipping.id}>
-                    {shipping.fullName},{shipping.phone},{shipping.address},
-                    {shipping.barangay},{shipping.city}
-                  </ListItem>
-                ))} */}
+              {shippingClient.map((shipping) => (
+                <ListItem key={shipping.id}>
+                  {shipping.fullName} &ensp; {shipping.phone} &ensp;
+                  {shipping.address} &ensp;
+                  {shipping.barangay} &ensp;
+                  {shipping.city}
+                </ListItem>
+              ))}
               <ListItem>
                 Status:
                 {isDelivered ? `delivered at ${deliveredAt}` : "not delivered"}
@@ -215,7 +223,7 @@ function Order(props) {
                   Payment Method
                 </Typography>
               </ListItem>
-              <ListItem>{paymentMethod}</ListItem>
+              <ListItem>{orderItem[0].paymentMethod}</ListItem>
               <ListItem>
                 Status:
                 {isPaid ? `paid at ${paidAt}` : "not paid"}
@@ -241,33 +249,35 @@ function Order(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {orderItem.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell>
-                            <Link>
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={item.imageUrl}
-                                alt={item.prodName}
-                                width={50}
-                                height={50}
-                              />
-                            </Link>
-                          </TableCell>
+                      {orderItem.map((item) =>
+                        item.orderItem.map((doc) => (
+                          <TableRow key={doc}>
+                            <TableCell>
+                              <Link>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={doc.imageUrl}
+                                  alt={doc.prodName}
+                                  width={50}
+                                  height={50}
+                                />
+                              </Link>
+                            </TableCell>
 
-                          <TableCell>
-                            <Link>
-                              <Typography>{item.prodName}</Typography>
-                            </Link>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography>{item.quantity}</Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography>₱{item.price}</Typography>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                            <TableCell>
+                              <Link>
+                                <Typography>{doc.prodName}</Typography>
+                              </Link>
+                            </TableCell>
+                            <TableCell>
+                              <Typography>{doc.quantity}</Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Typography>₱{doc.price}</Typography>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -287,7 +297,9 @@ function Order(props) {
                     <Typography>Items:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align="right">₱{itemsPrice}</Typography>
+                    <Typography align="right">
+                      ₱{orderItem[0].itemsPrice}
+                    </Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -297,7 +309,9 @@ function Order(props) {
                     <Typography>Tax:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align="right">₱{taxPrice}</Typography>
+                    <Typography align="right">
+                      ₱{orderItem[0].taxPrice}
+                    </Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -307,7 +321,9 @@ function Order(props) {
                     <Typography>Shipping:</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography align="right">₱{shippingPrice}</Typography>
+                    <Typography align="right">
+                      ₱{orderItem[0].shippingPrice}
+                    </Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -320,12 +336,21 @@ function Order(props) {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography align="right">
-                      <strong>₱{totalPrice}</strong>
+                      <strong>₱{orderItem[0].totalPrice}</strong>
                     </Typography>
                   </Grid>
                 </Grid>
               </ListItem>
-              {!isPaid && (
+              <ListItem>
+                <div className={classes.fullWidth}>
+                  <PayPalButtons
+                    createOrder={createOrder}
+                    onApprove={onApprove}
+                    onError={onError}
+                  />
+                </div>
+              </ListItem>
+              {/* {!isPaid && (
                 <ListItem>
                   {isPending ? (
                     <CircularProgress />
@@ -339,7 +364,7 @@ function Order(props) {
                     </div>
                   )}
                 </ListItem>
-              )}
+              )} */}
             </List>
           </Card>
         </Grid>
