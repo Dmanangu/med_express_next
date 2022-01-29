@@ -86,14 +86,15 @@ function PlaceOrder(props) {
 	const [ loading, setLoading ] = useState(false);
 	const placeOrderHandler = async () => {
 		// closeSnackBar();
+		var orderID = v4();
 		try {
 			setLoading(true);
 			firebase
 				.firestore()
 				.collection('orders')
-				.doc(v4())
+				.doc(orderID)
 				.set({
-					id: v4(),
+					id: orderID,
 					user_id: auth.currentUser.uid,
 					orderItem: cartItems,
 					paymentMethod,
@@ -107,7 +108,7 @@ function PlaceOrder(props) {
 			Cookies.remove('cartItems');
 			setLoading(false);
 			//implement database here in the ._id
-			router.push(`/order/${user.id}`);
+			router.push(`/order/${orderID}`);
 		} catch (err) {
 			setLoading(false);
 			enqueueSnackbar(getError(err), { variant: 'error' });

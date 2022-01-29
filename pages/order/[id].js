@@ -51,24 +51,15 @@ function reducer(state, action) {
 
 //Firebase
 
-export async function getServerSideProps() {
-	const postsQuery = firestore.collectionGroup('orders');
-	// .where('published', '==', true)
-	// .orderBy('createdAt', 'desc')
-	// .limit(LIMIT);
-
-	const posts = (await postsQuery.get()).docs.map(postToJSON);
-	console.log(posts);
-	return {
-		props: { posts } // will be passed to the page component as props
-	};
-}
-
 function Order(params, props) {
-	const orderId = params.id; // id here is equal to the [id].js name
 	const [ { isPending }, paypalDispatch ] = usePayPalScriptReducer();
 	const classes = useStyles();
 	const router = useRouter();
+	const { id } = router.query;
+
+	console.log('HHHHHHHHHHHHHHHHHHHHHHHH');
+	console.log(id);
+	console.log('HHHHHHHHHHHHHHHHHHHHHHHH');
 	// const { state } = useContext(Store);
 	// const { userInfo } = state;
 
@@ -81,11 +72,16 @@ function Order(params, props) {
 		order: {},
 		error: ''
 	});
-	//Firebase Shipping Address
-	// const shippingClient = posts.filter((shippingAddress) => {
-	//   return shippingAddress.id.includes(auth.currentUser.uid);
-	// });
-	//Firebase Shipping Address
+	//	Firebase Shipping Address
+	const orderItem = posts.filter((orders) => {
+		return orders.user_id.includes(auth.currentUser.uid);
+	});
+	//	Firebase Shipping Address
+
+	console.log('DDDDDDDDDDDDDDDDDDDDDDDD');
+	console.log(orderItem);
+	console.log('DDDDDDDDDDDDDDDDDDDDDDDD');
+
 	const {
 		paymentMethod,
 		orderItems,
@@ -102,9 +98,9 @@ function Order(params, props) {
 	const { user } = useContext(UserContext);
 	useEffect(
 		() => {
-			if (!user) {
-				return router.push('/login');
-			}
+			// if (!user) {
+			// 	return router.push('/login');
+			// }
 			const fetchOrder = async () => {
 				try {
 					dispatch({ type: 'FETCH_REQUEST' });
@@ -173,9 +169,9 @@ function Order(params, props) {
 		enqueueSnackbar(getError(err), { variant: 'error' });
 	}
 	return (
-		<Layout title={`Order ${orderId}`}>
+		<Layout title={`Order ${id}`}>
 			<Typography component="h1" variant="h1">
-				Order {orderId}
+				Order {id}
 			</Typography>
 
 			{loading ? (
@@ -348,5 +344,23 @@ function Order(params, props) {
 // export async function getServerSideProps({ params }) {
 //   return { props: { params } };
 // }
+
+export async function getServerSideProps({ props }) {
+	const postsQuery = firestore.collectionGroup('orders');
+	// .where('published', '==', true)
+	// .orderBy('createdAt', 'desc')
+	// .limit(LIMIT);
+
+	console.log('VVVVVVVVVVVVVVVVVVVVVVV');
+	console.log('VVVVVVVVVVVVVVVVVVVVVVV');
+
+	const posts = (await postsQuery.get()).docs.map(postToJSON);
+	console.log('VVVVVVVVVVVVVVVVVVVVVVV');
+	console.log(posts);
+	console.log('VVVVVVVVVVVVVVVVVVVVVVV');
+	return {
+		props: { posts } // will be passed to the page component as props
+	};
+}
 
 export default dynamic(() => Promise.resolve(Order), { ssr: false });
