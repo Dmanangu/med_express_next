@@ -20,13 +20,13 @@ export default function Login() {
 	const router = useRouter();
 	const { redirect } = router.query; // login?redirect=/shipping
 	const { state, dispatch } = useContext(Store);
-	const { userInfo } = state;
-	useEffect(() => {
-		if (userInfo) {
-			router.push('/');
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	// const { userInfo } = state;
+	// useEffect(() => {
+	// 	if (userInfo) {
+	// 		router.push('/');
+	// 	}
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
 
 	const auth = getAuth();
 

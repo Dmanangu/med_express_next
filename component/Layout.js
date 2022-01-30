@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { UserContext } from "../lib/context";
 import { logout } from "../component/firebase/useUser";
 import { getAuth, signOut } from "firebase/auth";
+import displayPic from "../public/images/acc_icon.png"
 
 export default function Layout({ title, children }) {
   const router = useRouter();
@@ -134,7 +135,7 @@ export default function Layout({ title, children }) {
                     onClick={loginClickHandler}
                     className={classes.navbarButton}
                   >
-                    {user.displayName}
+                   <Image src={displayPic} alt={user.displayName} width={30} height={30}/>
                     {/*if a user is logged in the login button will change into their name*/}
                   </Button>
                   <Menu
