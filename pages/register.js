@@ -57,60 +57,32 @@ export default function Register() {
     if (password !== confirmPassword) {
       enqueueSnackbar("Password don't match", { variant: "error" });
       return;
-    }
+    } else {
+      try {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((authUser) => {
+            console.log(authUser.user.uid);
+            console.log("Success. The user is created in firebase");
+            firebase
+              .firestore()
+              .collection("users")
+              .doc(authUser.user.uid)
+              .set({
+                id: authUser.user.uid,
+                name: name,
 
-    console.log("KKKKKKKKKKKKKKKKKKKK");
-    console.log(email);
-    console.log(password);
-
-    console.log("KKKKKKKKKKKKKKKKKKKK");
-    try {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((authUser) => {
-          console.log(authUser.user.uid);
-          console.log("Success. The user is created in firebase");
-          //router.push('/logged_in');'
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(authUser.user.uid)
-            .set({
-              id: authUser.user.uid,
-              name: name,
-
-              email: email,
-              password: password,
-            })
-            .then(alert("The User  was now saved."));
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-
-      // .then((userCredential) => {
-      // 	console.log(userCredential);
-      // 	//Signed in
-      // 	// const users = userCredential.user;
-      // 	// // ...
-      // 	// dispatch({ type: 'USER_LOGIN', payload: users });
-      // 	// Cookies.set(users);
-      // });
-
-      // console.log(auth.currentUser.uid);
-
-      // const userDoc = firestore.doc(`users/${auth.currentUser.uid}`);
-      // const batch = firestore.batch();
-      // batch.set(userDoc, {
-      // 	name: name,
-      // 	id: auth.currentUser.uid,
-      // 	email: email,
-      // 	password: password
-      // });
-
-      router.push(redirect || "/");
-      alert("success login");
-    } catch (err) {
-      enqueueSnackbar("Account Creation Error");
+                email: email,
+                password: password,
+              })
+              .then(alert("The User  was now saved."));
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+        router.push(redirect || "/");
+      } catch (err) {
+        enqueueSnackbar("Account Creation Error");
+      }
     }
   };
   return (
