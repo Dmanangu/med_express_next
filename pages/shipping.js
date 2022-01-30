@@ -116,7 +116,8 @@ export default function Shipping(props) {
 					barangay: barangay,
 					phone: phone,
 					city: city,
-					email: email[0].email
+					email: email[0].email,
+					status: 'not delivered'
 				})
 				.then(alert('The Shipping Address was now saved.'));
 			router.push('/payment');
