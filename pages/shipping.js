@@ -50,22 +50,15 @@ export default function Shipping(props) {
     if (!user) {
       router.push("/login?redirect=/shipping");
     }
-    // setValue("fullName", shippingAddress.fullName);
-    // setValue("address", shippingAddress.address);
-    // setValue("barangay", shippingAddress.barangay);
-    // setValue("phone", shippingAddress.phone);
-    // setValue("city", shippingAddress.city);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [posts, setPosts] = useState(props.posts);
-  if (!user) {
-    router.push("/login?redirect=/shipping");
-  } else {
-    const email = posts.filter((orders) => {
-      return orders.id.includes(auth.currentUser.uid);
-    });
-  }
+
+  const email = posts.filter((orders) => {
+    return orders.id.includes(auth.currentUser.uid);
+  });
 
   const sendShippingData = async ({
     fullName,
