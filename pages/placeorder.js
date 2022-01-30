@@ -102,7 +102,7 @@ function PlaceOrder(props) {
 					taxPrice,
 					shippingPrice,
 					totalPrice,
-					status: 'not paid'
+					status: 'pending payment'
 				})
 				.then(alert('Your order has been generated. Thank you for shopping.'));
 			dispatch({ type: 'CART_CLEAR' });
