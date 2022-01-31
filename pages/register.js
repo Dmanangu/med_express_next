@@ -79,7 +79,7 @@ export default function Register() {
           .catch((error) => {
             console.log(error.message);
           });
-        router.push(redirect || "/");
+        router.push("/login");
       } catch (err) {
         enqueueSnackbar("Account Creation Error");
       }
