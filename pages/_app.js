@@ -11,12 +11,12 @@ import { UserContext, MedContext } from "../lib/context";
 function MyApp({ Component, pageProps }) {
   const userData = useUserData();
 
-  const medicineData = useMedData();
+  // const medicineData = useMedData();
 
-  // console.log('SAAAAAAAAAAAAAAA');
+  // console.log("SAAAAAAAAAAAAAAA");
 
   // console.log(medicineData);
-  // console.log('SAAAAAAAAAAAAAAA');
+  // console.log("SAAAAAAAAAAAAAAA");
 
   // const foo = medicineData.then((result) => result.data);
 
@@ -35,21 +35,21 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return (
     <UserContext.Provider value={userData}>
-      <MedContext.Provider value={medicineData}>
-        <SnackbarProvider
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <StoreProvider>
-            <PayPalScriptProvider deferLoading={true}>
-              {/* <AuthProvider>
+      {/*  <MedContext.Provider value={medicineData}> */}
+      <SnackbarProvider
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <StoreProvider>
+          <PayPalScriptProvider deferLoading={true}>
+            {/* <AuthProvider>
             <AuthStateChanged> */}
-              <Component {...pageProps} />
-              {/* </AuthStateChanged>
+            <Component {...pageProps} />
+            {/* </AuthStateChanged>
           </AuthProvider> */}
-            </PayPalScriptProvider>
-          </StoreProvider>
-        </SnackbarProvider>
-      </MedContext.Provider>
+          </PayPalScriptProvider>
+        </StoreProvider>
+      </SnackbarProvider>
+      {/*    </MedContext.Provider> */}
     </UserContext.Provider>
   );
 }
