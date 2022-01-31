@@ -56,10 +56,6 @@ export default function Shipping(props) {
 
   const [posts, setPosts] = useState(props.posts);
 
-  const email = posts.filter((orders) => {
-    return orders.id.includes(auth.currentUser.uid);
-  });
-
   const sendShippingData = async ({
     fullName,
     address,
@@ -72,6 +68,9 @@ export default function Shipping(props) {
       type: "SAVE_SHIPPING_ADDRESS",
     });
     try {
+      const email = posts.filter((orders) => {
+        return orders.id.includes(auth.currentUser.uid);
+      });
       firebase
         .firestore()
         .collection("shippingAddress")
