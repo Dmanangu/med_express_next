@@ -48,6 +48,7 @@ export default function Shipping(props) {
   // } = state;
   useEffect(() => {
     if (!user) {
+      alert("No user detected please login first");
       router.push("/login?redirect=/shipping");
     }
 
