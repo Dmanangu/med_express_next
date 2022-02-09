@@ -142,7 +142,7 @@ function OrderHistory(props) {
                           <TableCell>{order.id}</TableCell>
 
                           {/* <TableCell>${order.totalPrice}</TableCell> */}
-                          <TableCell>${order.totalPrice}</TableCell>
+                          <TableCell>₱{order.totalPrice}</TableCell>
                           <TableCell>{order.status}</TableCell>
                           {shippingData.map((ship) => (
                             <TableCell key={ship.id}>{ship.status}</TableCell>
